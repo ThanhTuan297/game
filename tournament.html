@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Đấu MOBA - Swiss & Knockout Chéo</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #facc15;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1, h2, h3 { color: var(--accent-color); text-align: center; margin-top: 5px; }
+
+        .nav-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #1e293b;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+
+        .nav-link { color: #38bdf8; text-decoration: none; font-weight: bold; }
+        .nav-link:hover, .nav-link.active { color: #facc15; }
+
+        .section-box {
+            background: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+        }
+
+        /* KHU VỰC CHỌN 16 HẠT GIỐNG */
+        .seeds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+        }
+
+        .seed-card {
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+        }
+
+        .seed-card select {
+            width: 100%;
+            padding: 6px;
+            margin-top: 5px;
+            background: #1e293b;
+            color: white;
+            border: 1px solid #64748b;
+            border-radius: 4px;
+        }
+
+        /* SWISS & KNOCKOUT MATCHES */
+        .match-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .match-card {
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .match-team {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            background: #1e293b;
+            border-radius: 4px;
+        }
+
+        .match-team.winner { border-left: 4px solid #22c55e; background: #14532d; }
+        .match-team.loser { opacity: 0.6; }
+
+        .btn {
+            border: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-action { background: #38bdf8; color: #0f172a; }
+        .btn-action:hover { background: #7dd3fc; }
+        .btn-play { background: #22c55e; color: white; margin-top: 5px; }
+        .btn-play:hover { background: #16a34a; }
+        .btn-sm { padding: 4px 8px; font-size: 0.8rem; }
+
+        /* BRACKET KNOCKOUT */
+        .bracket-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .bracket-column {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .badge-win { background: #22c55e; color: white; }
+        .badge-loss { background: #ef4444; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 GIẢI ĐẤU QUỐC TẾ MOBA 🏆</h1>
+
+    <div class="nav-bar">
+        <a href="index.html" class="nav-link">🏠 Trang Chủ</a>
+        <a href="team.html" class="nav-link">🛡️ Quản Lý Đội</a>
+        <a href="tournament.html" class="nav-link active">🏆 Giải Đấu & Cặp Đấu</a>
+    </div>
+
+    <!-- BƯỚC 1: CHỌN 16 HẠT GIỐNG TỪ 4 KHU VỰC -->
+    <div class="section-box">
+        <h2>1️⃣ BẢNG 16 ĐỘI HẠT GIỐNG (4 SEED / KHU VỰC)</h2>
+        <div class="seeds-grid" id="seeds-selector-container"></div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button class="btn btn-action" onclick="confirmSeedsAndStartSwiss()">🎲 BẮT ĐẦU BỐC THĂM VÒNG SWISS</button>
+        </div>
+    </div>
+
+    <!-- BƯỚC 2: SWISS STAGE -->
+    <div class="section-box" id="swiss-section" style="display: none;">
+        <h2>2️⃣ VÒNG SWISS STAGE (3 THẮNG ĐI TIẾP - 3 THUA BỊ LOẠI)</h2>
+        <p style="text-align: center; color: #94a3b8; font-size: 0.9rem;">
+            Nhấn "Thắng" để ghi nhận kết quả thủ công hoặc bấm "CHIẾN TRONG ĐẤU TRƯỜNG" để nhảy sang trang dautruong.html đánh trực tiếp!
+        </p>
+        
+        <div id="swiss-status-summary" style="margin-bottom: 15px;"></div>
+        
+        <div style="text-align: center; margin-bottom: 10px;">
+            <button class="btn btn-action" id="btn-next-swiss-round" onclick="generateNextSwissRound()" style="display:none;">
+                ⚡ BỐC THĂM VÒNG SWISS TIẾP THEO
+            </button>
+        </div>
+
+        <div id="swiss-rounds-container"></div>
+    </div>
+
+    <!-- BƯỚC 3: KNOCKOUT NHÁNH THẮNG - NHÁNH THUA CHÉO -->
+    <div class="section-box" id="knockout-section" style="display: none;">
+        <h2>3️⃣ VÒNG KNOCKOUT (NHÁNH THẮNG & NHÁNH THUA CHÉO)</h2>
+        <div class="bracket-container" id="bracket-tree"></div>
+    </div>
+
+    <script>
+        let allTeamsData = {};
+        let selected16Teams = []; // Danh sách 16 đội được chọn
+        let swissState = {
+            round: 1,
+            teams: [], // { id, name, wins: 0, losses: 0, history: [] }
+            matches: [], // Danh sách match các vòng
+            finished: false
+        };
+
+        const REGIONS_INFO = {
+            red: { name: "🔴 Khu Vực Đỏ" },
+            yellow: { name: "🟡 Khu Vực Vàng" },
+            blue: { name: "🔵 Khu Vực Xanh Lục" },
+            green: { name: "🟢 Khu Vực Xanh Lá" }
+        };
+
+        // Load dữ liệu 32 đội từ team.html
+        function initData() {
+            const saved = localStorage.getItem('moba_all_teams_data');
+            if (saved) {
+                allTeamsData = JSON.parse(saved);
+            } else {
+                alert("Chưa có dữ liệu đội! Vui lòng vào trang Quản Lý Đội trước.");
+                window.location.href = 'team.html';
+                return;
+            }
+            renderSeedSelectors();
+        }
+
+        // Render 16 ô chọn Seed đại diện cho 4 khu vực
+        function renderSeedSelectors() {
+            const container = document.getElementById('seeds-selector-container');
+            container.innerHTML = '';
+
+            Object.keys(REGIONS_INFO).forEach(regKey => {
+                const teams = allTeamsData[regKey] || [];
+                let html = `<div class="seed-card"><h3>${REGIONS_INFO[regKey].name}</h3>`;
+
+                for (let seed = 1; seed <= 4; seed++) {
+                    html += `<label style="font-size: 0.85rem; color: #94a3b8;">Hạt giống ${seed}:</label>
+                    <select id="select-${regKey}-seed-${seed}">`;
+                    teams.forEach((t, idx) => {
+                        // Tự chọn mặc định 4 đội đầu làm 4 seed
+                        const isSelected = (idx === seed - 1) ? 'selected' : '';
+                        html += `<option value="${t.id}" ${isSelected}>${t.name}</option>`;
+                    });
+                    html += `</select><br>`;
+                }
+                html += `</div>`;
+                container.innerHTML += html;
+            });
+        }
+
+        // Xác nhận 16 đội và bắt đầu Vòng Swiss
+        function confirmSeedsAndStartSwiss() {
+            selected16Teams = [];
+            let chosenIds = new Set();
+
+            let hasDuplicate = false;
+            Object.keys(REGIONS_INFO).forEach(regKey => {
+                for (let seed = 1; seed <= 4; seed++) {
+                    const selectEl = document.getElementById(`select-${regKey}-seed-${seed}`);
+                    const teamId = selectEl.value;
+                    if (chosenIds.has(teamId)) hasDuplicate = true;
+                    chosenIds.add(teamId);
+
+                    // Tìm object team tương ứng
+                    const teamObj = allTeamsData[regKey].find(t => t.id === teamId);
+                    if (teamObj) {
+                        selected16Teams.push({
+                            id: teamObj.id,
+                            name: teamObj.name,
+                            players: teamObj.players,
+                            region: regKey,
+                            wins: 0,
+                            losses: 0,
+                            history: [],
+                            qualified: false,
+                            eliminated: false
+                        });
+                    }
+                }
+            });
+
+            if (hasDuplicate) {
+                alert("Cảnh báo: Bạn đã chọn trùng đội trong cùng 1 khu vực! Vui lòng chọn 4 đội khác nhau.");
+                return;
+            }
+
+            // Khởi tạo Swiss State
+            swissState = {
+                round: 1,
+                teams: JSON.parse(JSON.stringify(selected16Teams)),
+                matches: [],
+                finished: false
+            };
+
+            document.getElementById('swiss-section').style.display = 'block';
+            document.getElementById('swiss-section').scrollIntoView({ behavior: 'smooth' });
+
+            generateSwissRound(1);
+        }
+
+        // Tạo vòng Swiss mới (Ghép cặp các đội cùng hệ số Thắng-Thua)
+        function generateSwissRound(roundNum) {
+            swissState.round = roundNum;
+            const activeTeams = swissState.teams.filter(t => !t.qualified && !t.eliminated);
+
+            // Phân nhóm theo tỉ số Thắng-Thua (Ví dụ: "1-0", "0-1", "2-1"...)
+            const groups = {};
+            activeTeams.forEach(t => {
+                const key = `${t.wins}-${t.losses}`;
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(t);
+            });
+
+            const roundMatches = [];
+
+            Object.keys(groups).forEach(groupKey => {
+                let pool = [...groups[groupKey]];
+                // Trộn ngẫu nhiên trong nhóm
+                pool.sort(() => Math.random() - 0.5);
+
+                while (pool.length >= 2) {
+                    const t1 = pool.pop();
+                    const t2 = pool.pop();
+                    roundMatches.push({
+                        id: `swiss_r${roundNum}_${t1.id}_vs_${t2.id}`,
+                        round: roundNum,
+                        groupKey: groupKey,
+                        team1: t1,
+                        team2: t2,
+                        winnerId: null
+                    });
+                }
+            });
+
+            swissState.matches.push(...roundMatches);
+            renderSwissUI();
+        }
+
+        // Render Giao diện Vòng Swiss
+        function renderSwissUI() {
+            const summaryEl = document.getElementById('swiss-status-summary');
+            const container = document.getElementById('swiss-rounds-container');
+            const nextBtn = document.getElementById('btn-next-swiss-round');
+
+            // Đếm đội đi tiếp / bị loại
+            const qualified = swissState.teams.filter(t => t.wins >= 3);
+            const eliminated = swissState.teams.filter(t => t.losses >= 3);
+
+            summaryEl.innerHTML = `
+                <div style="display:flex; justify-content: space-around; background: #0f172a; padding: 10px; border-radius: 8px;">
+                    <span style="color:#22c55e;">✅ Đã vào Knockout (3 W): <b>${qualified.length} / 8 Đội</b></span>
+                    <span style="color:#ef4444;">❌ Đã bị loại (3 L): <b>${eliminated.length} / 8 Đội</b></span>
+                </div>
+            `;
+
+            container.innerHTML = '';
+
+            // Group matches theo Round
+            for (let r = 1; r <= swissState.round; r++) {
+                const rMatches = swissState.matches.filter(m => m.round === r);
+                if (rMatches.length === 0) continue;
+
+                let html = `<h3 style="text-align:left; color:#38bdf8;">📌 VÒNG SWISS ${r}</h3><div class="match-list">`;
+
+                rMatches.forEach(m => {
+                    const isDone = m.winnerId !== null;
+                    const t1Win = m.winnerId === m.team1.id;
+                    const t2Win = m.winnerId === m.team2.id;
+
+                    html += `
+                        <div class="match-card">
+                            <span style="font-size:0.75rem; color:#facc15;">Nhóm tỷ số: ${m.groupKey}</span>
+                            
+                            <div class="match-team ${t1Win ? 'winner' : (isDone ? 'loser' : '')}">
+                                <span><b>${m.team1.name}</b> (${m.team1.wins}W - ${m.team1.losses}L)</span>
+                                ${!isDone ? `<button class="btn btn-action btn-sm" onclick="setSwissWinner('${m.id}', '${m.team1.id}')">Thắng</button>` : (t1Win ? '👑 WIN' : '')}
+                            </div>
+
+                            <div class="match-team ${t2Win ? 'winner' : (isDone ? 'loser' : '')}">
+                                <span><b>${m.team2.name}</b> (${m.team2.wins}W - ${m.team2.losses}L)</span>
+                                ${!isDone ? `<button class="btn btn-action btn-sm" onclick="setSwissWinner('${m.id}', '${m.team2.id}')">Thắng</button>` : (t2Win ? '👑 WIN' : '')}
+                            </div>
+
+                            ${!isDone ? `<button class="btn btn-play" onclick="launchGameMatch('${m.team1.id}', '${m.team2.id}')">⚔️ CHIẾN TRONG ĐẤU TRƯỜNG ⚔️</button>` : ''}
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+                container.innerHTML += html;
+            }
+
+            // Kiểm tra xem vòng hiện tại đã đấu xong hết chưa
+            const currentRoundMatches = swissState.matches.filter(m => m.round === swissState.round);
+            const allCurrentDone = currentRoundMatches.every(m => m.winnerId !== null);
+
+            if (qualified.length >= 8 || swissState.round >= 5) {
+                nextBtn.style.display = 'none';
+                if (!swissState.finished) {
+                    swissState.finished = true;
+                    initKnockoutStage(qualified);
+                }
+            } else if (allCurrentDone && currentRoundMatches.length > 0) {
+                nextBtn.style.display = 'inline-block';
+            } else {
+                nextBtn.style.display = 'none';
+            }
+        }
+
+        // Tự ghi nhận kết quả Thắng Swiss
+        function setSwissWinner(matchId, winnerId) {
+            const match = swissState.matches.find(m => m.id === matchId);
+            if (!match || match.winnerId) return;
+
+            match.winnerId = winnerId;
+            const loserId = (winnerId === match.team1.id) ? match.team2.id : match.team1.id;
+
+            const winner = swissState.teams.find(t => t.id === winnerId);
+            const loser = swissState.teams.find(t => t.id === loserId);
+
+            winner.wins += 1;
+            loser.losses += 1;
+
+            if (winner.wins >= 3) winner.qualified = true;
+            if (loser.losses >= 3) loser.eliminated = true;
+
+            renderSwissUI();
+        }
+
+        function generateNextSwissRound() {
+            generateSwissRound(swissState.round + 1);
+        }
+
+        // CHUYỂN SANG TRANG DAUTRUONG.HTML
+        function launchGameMatch(team1Id, team2Id) {
+            const t1 = swissState.teams.find(t => t.id === team1Id);
+            const t2 = swissState.teams.find(t => t.id === team2Id);
+
+            const matchPlayers = [];
+            // Team 1 (Xanh)
+            t1.players.forEach((p, idx) => {
+                matchPlayers.push({ id: idx, name: p.name, elo: p.elo, role: p.role });
+            });
+            // Team 2 (Đỏ)
+            t2.players.forEach((p, idx) => {
+                matchPlayers.push({ id: idx + 4, name: p.name, elo: p.elo, role: p.role });
+            });
+
+            const matchPayload = {
+                blueTitle: t1.name,
+                redTitle: t2.name,
+                globalLives: 5,
+                players: matchPlayers
+            };
+
+            localStorage.setItem('moba_game_settings', JSON.stringify(matchPayload));
+            window.location.href = 'dautruong.html';
+        }
+
+        // ==========================================
+        // VÒNG KNOCKOUT NHÁNH THẮNG - NHÁNH THUA CHÉO
+        // ==========================================
+        function initKnockoutStage(top8Teams) {
+            document.getElementById('knockout-section').style.display = 'block';
+            document.getElementById('knockout-section').scrollIntoView({ behavior: 'smooth' });
+
+            const treeContainer = document.getElementById('bracket-tree');
+            treeContainer.innerHTML = `
+                <div class="bracket-column">
+                    <h3>🏆 NHÁNH THẮNG (UPPER BRACKET)</h3>
+                    <div class="match-card">
+                        <span style="color:#38bdf8;">Bán Kết 1 (Nhánh Thắng)</span>
+                        <div class="match-team"><b>${top8Teams[0]?.name || 'Đội 1'}</b></div>
+                        <div class="match-team"><b>${top8Teams[1]?.name || 'Đội 2'}</b></div>
+                    </div>
+                    <div class="match-card">
+                        <span style="color:#38bdf8;">Bán Kết 2 (Nhánh Thắng)</span>
+                        <div class="match-team"><b>${top8Teams[2]?.name || 'Đội 3'}</b></div>
+                        <div class="match-team"><b>${top8Teams[3]?.name || 'Đội 4'}</b></div>
+                    </div>
+                </div>
+
+                <div class="bracket-column">
+                    <h3>💀 NHÁNH THUA CHÉO (LOWER BRACKET)</h3>
+                    <div class="match-card" style="border-color:#ef4444;">
+                        <span style="color:#f87171;">Vòng 1 (Thua BK1 vs Thua BK2 CHÉO)</span>
+                        <div class="match-team"><b>Thua BK1 Nhánh Thắng</b></div>
+                        <div class="match-team"><b>Thua BK2 Nhánh Thắng</b></div>
+                    </div>
+                    <div class="match-card" style="border-color:#ef4444;">
+                        <span style="color:#f87171;">Chung Kết Nhánh Thua</span>
+                        <div class="match-team"><b>Thắng Nhánh Thua V1</b></div>
+                        <div class="match-team"><b>Thua CK Nhánh Thắng</b></div>
+                    </div>
+                </div>
+
+                <div class="bracket-column">
+                    <h3>👑 CHUNG KẾT TỔNG (GRAND FINAL)</h3>
+                    <div class="match-card" style="border-color:#facc15;">
+                        <span style="color:#facc15;">Trận Đấu Vô Địch</span>
+                        <div class="match-team"><b>Vô Địch Nhánh Thắng</b></div>
+                        <div class="match-team"><b>Vô Địch Nhánh Thua</b></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Chạy khởi tạo trang
+        initData();
+    </script>
+</body>
+</html>
