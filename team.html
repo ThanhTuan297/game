@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khu Vực MOBA</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #facc15;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        /* THANH NAV KẾT NỐI TRANG */
+        .nav-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #1e293b;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+
+        .nav-link {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover { color: #facc15; }
+        .nav-link.active { color: #facc15; border-bottom: 2px solid #facc15; }
+
+        /* TAB CHỌN KHU VỰC (4 KHU VỰC) */
+        .region-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .tab-red { background: #991b1b; }
+        .tab-red.active { border-color: #f87171; box-shadow: 0 0 10px rgba(248, 113, 113, 0.5); }
+
+        .tab-yellow { background: #854d0e; }
+        .tab-yellow.active { border-color: #facc15; box-shadow: 0 0 10px rgba(250, 204, 21, 0.5); }
+
+        .tab-blue { background: #1e40af; }
+        .tab-blue.active { border-color: #60a5fa; box-shadow: 0 0 10px rgba(96, 165, 250, 0.5); }
+
+        .tab-green { background: #166534; }
+        .tab-green.active { border-color: #4ade80; box-shadow: 0 0 10px rgba(74, 222, 128, 0.5); }
+
+        /* LAYOUT DANH SÁCH 8 ĐỘI */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 1300px;
+        }
+
+        .team-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 8px;
+        }
+
+        .team-header span {
+            font-weight: bold;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .team-name-input {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: #facc15;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 6px 10px;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .player-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+
+        .player-row input[type="text"] {
+            flex: 1.5;
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: white;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .player-row input[type="number"] {
+            width: 55px;
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: #facc15;
+            font-weight: bold;
+            padding: 4px 4px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .player-row select {
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: white;
+            padding: 4px 2px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* NÚT THAO TÁC Bottom */
+        .actions-bar {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-save { background: #22c55e; color: white; }
+        .btn-save:hover { background: #16a34a; }
+
+        .btn-reset { background: #ef4444; color: white; }
+        .btn-reset:hover { background: #dc2626; }
+    </style>
+</head>
+<body>
+
+    <h1>🛡️ KHU VỰC 🛡️</h1>
+
+    <!-- LIÊN KẾT GIỮA CÁC TRANG -->
+    <div class="nav-bar">
+        <a href="index.html" class="nav-link">🏠 Trang Chủ</a>
+        <a href="team.html" class="nav-link active">🛡️ Quản Lý Đội (32 Đội)</a>
+        <a href="tournament.html" class="nav-link">🏆 Giải Đấu & Cặp Đấu</a>
+    </div>
+
+    <!-- TABS KHU VỰC -->
+    <div class="region-tabs">
+        <button class="tab-btn tab-red active" onclick="switchRegion('red')">🔴 Khu Vực Đỏ (8 Đội)</button>
+        <button class="tab-btn tab-yellow" onclick="switchRegion('yellow')">🟡 Khu Vực Vàng (8 Đội)</button>
+        <button class="tab-btn tab-blue" onclick="switchRegion('blue')">🔵 Khu Vực Xanh Lục (8 Đội)</button>
+        <button class="tab-btn tab-green" onclick="switchRegion('green')">🟢 Khu Vực Xanh Lá (8 Đội)</button>
+    </div>
+
+    <!-- KHU VỰC HIỂN THỊ 8 ĐỘI -->
+    <div class="teams-grid" id="teams-container"></div>
+
+    <!-- BẢNG NÚT LƯU -->
+    <div class="actions-bar">
+        <button class="btn btn-save" onclick="saveAllTeams()">💾 LƯU TOÀN BỘ DANH SÁCH 32 ĐỘI</button>
+        <button class="btn btn-reset" onclick="resetToDefault()">🔄 KHÔI PHỤC DỮ LIỆU MẶC ĐỊNH</button>
+    </div>
+
+    <script>
+        const REGIONS = {
+            red: { name: "Khu Vực Đỏ", prefix: "🔴" },
+            yellow: { name: "Khu Vực Vàng", prefix: "🟡" },
+            blue: { name: "Khu Vực Xanh Lục", prefix: "🔵" },
+            green: { name: "Khu Vực Xanh Lá", prefix: "🟢" }
+        };
+
+        let currentRegion = 'red';
+        let allTeamsData = {};
+
+        // Khởi tạo dữ liệu mặc định đủ 4 khu vực x 8 đội = 32 đội
+        function generateDefaultData() {
+            const data = {};
+            const roles = ['fighter', 'assassin', 'marksman', 'tank'];
+
+            Object.keys(REGIONS).forEach(regKey => {
+                data[regKey] = [];
+                for (let i = 1; i <= 8; i++) {
+                    const teamName = `${REGIONS[regKey].name} - Đội ${i}`;
+                    const players = [];
+                    for (let p = 1; p <= 4; p++) {
+                        players.push({
+                            name: `P${p}_${regKey.toUpperCase()}${i}`,
+                            elo: 1500,
+                            role: roles[p - 1]
+                        });
+                    }
+                    data[regKey].push({
+                        id: `${regKey}_team_${i}`,
+                        name: teamName,
+                        players: players
+                    });
+                }
+            });
+            return data;
+        }
+
+        // Tải dữ liệu từ LocalStorage
+        function loadData() {
+            const saved = localStorage.getItem('moba_all_teams_data');
+            if (saved) {
+                try {
+                    allTeamsData = JSON.parse(saved);
+                } catch (e) {
+                    allTeamsData = generateDefaultData();
+                }
+            } else {
+                allTeamsData = generateDefaultData();
+            }
+        }
+
+        // Chuyển tab Khu Vực
+        function switchRegion(regionKey) {
+            // Lưu dữ liệu trên giao diện hiện tại trước khi chuyển tab
+            readCurrentGridToData();
+
+            currentRegion = regionKey;
+
+            // Cập nhật giao diện Tab Active
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (regionKey === 'red') document.querySelector('.tab-red').classList.add('active');
+            if (regionKey === 'yellow') document.querySelector('.tab-yellow').classList.add('active');
+            if (regionKey === 'blue') document.querySelector('.tab-blue').classList.add('active');
+            if (regionKey === 'green') document.querySelector('.tab-green').classList.add('active');
+
+            renderTeamsGrid();
+        }
+
+        // Đọc dữ liệu từ Form về biến JS
+        function readCurrentGridToData() {
+            if (!allTeamsData[currentRegion]) return;
+
+            allTeamsData[currentRegion].forEach((team, tIdx) => {
+                const teamNameInput = document.getElementById(`team-name-${tIdx}`);
+                if (teamNameInput) team.name = teamNameInput.value;
+
+                team.players.forEach((p, pIdx) => {
+                    const pName = document.getElementById(`pname-${tIdx}-${pIdx}`);
+                    const pElo = document.getElementById(`pelo-${tIdx}-${pIdx}`);
+                    const pRole = document.getElementById(`prole-${tIdx}-${pIdx}`);
+
+                    if (pName) p.name = pName.value;
+                    if (pElo) p.elo = parseInt(pElo.value) || 1000;
+                    if (pRole) p.role = pRole.value;
+                });
+            });
+        }
+
+        // Vẽ 8 Đội của Khu Vực hiện tại lên Màn Hình
+        function renderTeamsGrid() {
+            const container = document.getElementById('teams-container');
+            container.innerHTML = '';
+
+            const teams = allTeamsData[currentRegion];
+
+            teams.forEach((team, tIdx) => {
+                let playersHtml = '';
+                team.players.forEach((p, pIdx) => {
+                    playersHtml += `
+                        <div class="player-row">
+                            <input type="text" id="pname-${tIdx}-${pIdx}" value="${p.name}" placeholder="Tên Tuyển Thủ">
+                            <input type="number" id="pelo-${tIdx}-${pIdx}" value="${p.elo}" title="Elo">
+                            <select id="prole-${tIdx}-${pIdx}">
+                                <option value="fighter" ${p.role==='fighter'?'selected':''}>⚔️ Đấu Sĩ</option>
+                                <option value="assassin" ${p.role==='assassin'?'selected':''}>🗡️ Sát Thủ</option>
+                                <option value="marksman" ${p.role==='marksman'?'selected':''}>🏹 Xạ Thủ</option>
+                                <option value="tank" ${p.role==='tank'?'selected':''}>🛡️ Đỡ Đòn</option>
+                            </select>
+                        </div>
+                    `;
+                });
+
+                const cardHtml = `
+                    <div class="team-card">
+                        <div class="team-header">
+                            <span>#${tIdx + 1}</span>
+                            <input type="text" class="team-name-input" id="team-name-${tIdx}" value="${team.name}">
+                        </div>
+                        <div>${playersHtml}</div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        // Lưu toàn bộ 32 Đội vào LocalStorage
+        function saveAllTeams() {
+            readCurrentGridToData();
+            localStorage.setItem('moba_all_teams_data', JSON.stringify(allTeamsData));
+            alert("✅ Đã lưu toàn bộ thông tin 32 đội thuộc 4 khu vực thành công!");
+        }
+
+        // Khôi phục mặc định
+        function resetToDefault() {
+            if (confirm("Bạn có chắc chắn muốn xóa hết tùy chỉnh và khôi phục lại 32 đội mặc định không?")) {
+                allTeamsData = generateDefaultData();
+                localStorage.setItem('moba_all_teams_data', JSON.stringify(allTeamsData));
+                renderTeamsGrid();
+                alert("🔄 Đã khôi phục dữ liệu mặc định!");
+            }
+        }
+
+        // Chạy lần đầu
+        loadData();
+        renderTeamsGrid();
+    </script>
+</body>
+</html>
