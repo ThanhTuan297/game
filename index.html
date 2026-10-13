@@ -3,1220 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đấu Trường MOBA 4v4 - Cân Bằng Skill & KDA</title>
+    <title>Đăng Nhập - English Game</title>
     <style>
         :root {
-            --blue-color: #2563eb;
-            --red-color: #dc2626;
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
+            --bg-main: #0f1117;
+            --card-bg: #1a1d26;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-start: #ff3b5c;
+            --accent-end: #e60033;
+            --border-color: #2a2f3d;
+            --input-bg: #141720;
+        }
+
+        .light-mode {
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-start: #dc2626;
+            --accent-end: #b91c1c;
+            --border-color: #e2e8f0;
+            --input-bg: #f1f5f9;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 10px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem 2rem;
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         h1 {
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 0 0 10px 0;
+            margin-top: 0;
             font-size: 1.5rem;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-        }
-
-        /* THANH ĐIỀU KHIỂN */
-        .controls-bar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            background: #1e293b;
-            padding: 8px 15px;
-            border-radius: 10px;
-            border: 1px solid #334155;
-        }
-
-        .setting-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #facc15;
-            background: #0f172a;
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 1px solid #475569;
-        }
-
-        .setting-group input {
-            width: 45px;
-            background: transparent;
-            border: none;
-            color: #facc15;
-            font-weight: bold;
-            font-size: 0.9rem;
             text-align: center;
-            outline: none;
+            margin-bottom: 1.5rem;
         }
 
-        button {
-            border: none;
-            padding: 7px 14px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
+        .form-group {
+            margin-bottom: 1.25rem;
         }
 
-        .btn-start { background: #22c55e; color: white; }
-        .btn-start:hover { background: #16a34a; }
-        
-        .btn-reset { background: #f59e0b; color: white; }
-        .btn-reset:hover { background: #d97706; }
-
-        .btn-referee { background: #e11d48; color: white; border: 1px solid #fda4af; }
-        .btn-referee:hover { background: #be123c; }
-
-        .timer-badge {
-            font-weight: bold;
-            font-size: 1rem;
-            color: #38bdf8;
-            font-family: monospace;
-        }
-
-        /* BỐ CỤC 3 CỘT */
-        .main-layout {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            max-width: 1200px;
-            align-items: flex-start;
-        }
-
-        .team-column {
-            flex: 1.2;
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 10px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            border-top: 4px solid transparent;
-        }
-
-        .blue-col { border-color: var(--blue-color); }
-        .red-col { border-color: var(--red-color); }
-
-        .team-header-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #475569;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 10px;
-            outline: none;
-        }
-
-        .blue-col .team-header-input { color: #60a5fa; border-color: var(--blue-color); }
-        .red-col .team-header-input { color: #f87171; border-color: var(--red-color); }
-
-        .player-card {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 8px;
-        }
-
-        .player-inputs-row {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 4px;
-            align-items: center;
-        }
-
-        .player-inputs-row input[type="text"] {
-            flex: 1.5;
-            background: #0f172a;
-            border: 1px solid #475569;
-            color: white;
-            padding: 3px 5px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .player-inputs-row input[type="number"] {
-            width: 50px;
-            background: #0f172a;
-            border: 1px solid #475569;
-            color: #facc15;
-            font-weight: bold;
-            padding: 3px 4px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            text-align: center;
-        }
-
-        .player-inputs-row select {
-            background: #0f172a;
-            border: 1px solid #475569;
-            color: white;
-            padding: 3px 2px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-        }
-
-        .lives-count {
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #facc15;
-            white-space: nowrap;
-        }
-
-        /* THANH MÁU */
-        .hp-bar-bg {
-            width: 100%;
-            height: 8px;
-            background: #334155;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 4px;
-        }
-
-        .hp-bar-fill {
-            height: 100%;
-            width: 100%;
-            transition: width 0.2s ease-out;
-        }
-
-        .blue-col .hp-bar-fill { background: #3b82f6; }
-        .red-col .hp-bar-fill { background: #ef4444; }
-
-        /* ĐẤU TRƯỜNG CỘT GIỮA */
-        .arena-center-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .arena-wrapper {
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 3px solid #334155;
-        }
-
-        canvas {
-            background: #020617;
+        label {
             display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
-        /* BẢNG KDA THU GỌN & TỔNG KILL */
-        .kda-in-arena {
-            width: 500px;
-            background: #1e293b;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            padding: 8px;
+        input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--text-main);
             box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.2s;
         }
 
-        .team-kills-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #0f172a;
-            padding: 6px 12px;
-            border-radius: 6px;
-            margin-bottom: 8px;
+        input:focus {
+            outline: none;
+            border-color: var(--accent-start);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
             font-size: 1rem;
             font-weight: bold;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: opacity 0.2s, transform 0.1s;
         }
 
-        .kda-grid {
-            display: flex;
-            gap: 10px;
+        .submit-btn:hover {
+            opacity: 0.9;
         }
 
-        .kda-team-table {
-            flex: 1;
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.75rem;
+        .submit-btn:active {
+            transform: scale(0.98);
         }
 
-        .kda-team-table th, .kda-team-table td {
-            padding: 3px 4px;
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.875rem;
             text-align: center;
-            border-bottom: 1px solid #334155;
-        }
-
-        .kda-team-table th { background: #0f172a; color: #64748b; }
-        .text-blue { color: #60a5fa; font-weight: bold; }
-        .text-red { color: #f87171; font-weight: bold; }
-
-        /* POPUP KẾT QUẢ */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            margin-top: 1rem;
             display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
         }
 
-        .result-box {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 20px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
-            border: 2px solid #475569;
-        }
-
-        .winner-title {
+        .hint {
             text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .mvp-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .mvp-badge {
-            flex: 1;
-            padding: 8px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .mvp-win {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
-        }
-
-        .mvp-lose {
-            background: linear-gradient(135deg, #64748b, #475569);
-            color: #f1f5f9;
-        }
-
-        .stats-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-        }
-
-        .stats-table th, .stats-table td {
-            padding: 6px 8px;
-            text-align: center;
-            border-bottom: 1px solid #334155;
-        }
-
-        .stats-table th { background: #0f172a; color: #94a3b8; }
-
-        @media (max-width: 1000px) {
-            .main-layout { flex-direction: column; align-items: center; }
-            .kda-in-arena { width: 100%; }
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 1.5rem;
         }
     </style>
 </head>
 <body>
 
-    <h1>⚔️ ĐẤU TRƯỜNG MOBA 4V4 ⚔️</h1>
+    <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Đổi giao diện">🌙</button>
 
-    <!-- THANH ĐIỀU KHIỂN -->
-    <div class="controls-bar">
-        <button class="btn-start" id="start-btn" onclick="toggleStart()">▶ BẮT ĐẦU</button>
-        <button class="btn-reset" onclick="resetGame()">🔄 RESET</button>
-        <button class="btn-referee" id="bo-btn" onclick="triggerZoneShrink()">🔴 BẮT ĐẦU THU BO (TRỌNG TÀI)</button>
-        
-        <div class="setting-group">
-            <span>❤️ Số Mạng:</span>
-            <input type="number" id="global-lives" value="5" min="1" max="99" onchange="saveSettingsToStorage()">
-        </div>
-
-        <div class="timer-badge" id="match-timer">⏱️ 00:00</div>
-    </div>
-
-    <!-- BỐ CỤC 3 CỘT -->
-    <div class="main-layout">
-        
-        <!-- CỘT TRÁI: ĐỘI XANH -->
-        <div class="team-column blue-col">
-            <input type="text" class="team-header-input" value="ĐỘI XANH" id="team-blue-title" onchange="saveSettingsToStorage()">
-            <div id="blue-players-ui"></div>
-        </div>
-
-        <!-- CỘT GIỮA: ĐẤU TRƯỜNG & KDA -->
-        <div class="arena-center-container">
-            <div class="arena-wrapper">
-                <canvas id="arena" width="500" height="500"></canvas>
+    <div class="login-card">
+        <h1>Bắt Đầu Hành Trình</h1>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Tài khoản</label>
+                <input type="text" id="username" required placeholder="Nhập tài khoản...">
             </div>
-
-            <!-- BẢNG KDA THU GỌN -->
-            <div class="kda-in-arena">
-                <div class="team-kills-header">
-                    <span class="text-blue" id="total-blue-kills">XANH: 0</span>
-                    <span style="color:#64748b; font-size:0.8rem">TỔNG HẠ GỤC</span>
-                    <span class="text-red" id="total-red-kills">0 :ĐỎ</span>
-                </div>
-                <div class="kda-grid">
-                    <table class="kda-team-table">
-                        <thead>
-                            <tr><th>Xanh</th><th>K/D/A</th><th>Điểm</th></tr>
-                        </thead>
-                        <tbody id="kda-blue-body"></tbody>
-                    </table>
-                    <table class="kda-team-table">
-                        <thead>
-                            <tr><th>Đỏ</th><th>K/D/A</th><th>Điểm</th></tr>
-                        </thead>
-                        <tbody id="kda-red-body"></tbody>
-                    </table>
-                </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" required placeholder="Nhập mật khẩu...">
             </div>
-        </div>
-
-        <!-- CỘT PHẢI: ĐỘI ĐỎ -->
-        <div class="team-column red-col">
-            <input type="text" class="team-header-input" value="ĐỘI ĐỎ" id="team-red-title" onchange="saveSettingsToStorage()">
-            <div id="red-players-ui"></div>
-        </div>
-
-    </div>
-
-    <!-- POPUP KẾT QUẢ -->
-    <div class="modal-overlay" id="result-modal">
-        <div class="result-box">
-            <div class="winner-title" id="winner-text">ĐỘI XANH CHIẾN THẮNG!</div>
-            
-            <div class="mvp-container">
-                <div class="mvp-badge mvp-win" id="mvp-win-text">👑 MVP Thắng: ---</div>
-                <div class="mvp-badge mvp-lose" id="mvp-lose-text">🎖️ MVP Bại: ---</div>
-            </div>
-
-            <table class="stats-table">
-                <thead>
-                    <tr>
-                        <th>Tuyển thủ</th>
-                        <th>Đội</th>
-                        <th>K / D / A</th>
-                        <th>KDA Score</th>
-                    </tr>
-                </thead>
-                <tbody id="stats-body"></tbody>
-            </table>
-
-            <div style="text-align: center;">
-                <button class="btn-reset" onclick="closeModal()">ĐÓNG BẢNG KẾT QUẢ</button>
-            </div>
-        </div>
+            <button type="submit" class="submit-btn">Vào Web / Kiểm Tra</button>
+            <div id="errorMsg" class="error-msg">Sai tài khoản hoặc mật khẩu!</div>
+        </form>
+        <div class="hint">Tài khoản thử nghiệm: 12367 / 12367</div>
     </div>
 
     <script>
-        const canvas = document.getElementById('arena');
-        const ctx = canvas.getContext('2d');
-
-        const BASE_SPEED = 3.0;
-        const ASSIST_WINDOW_MS = 4500; // 4.5 giây tính điểm hỗ trợ
-
-        // Ô HỒI SINH
-        const spawnZones = {
-            blue: { x: 75, y: 250, radius: 45 },
-            red: { x: 425, y: 250, radius: 45 }
-        };
-
-        // MỐC THỜI GIAN HỒI SINH THEO SỐ LẦN CHẾT (7s, 10s, 15s, 20s, 25s)
-        const RESPAWN_DELAYS = [7, 10, 15, 20, 25];
-
-        const ROLE_CONFIGS = {
-            fighter:  { name: '⚔️ Đấu Sĩ', icon: '⚔️', hpPct: 1.2, dmgRatio: 35, radius: 20 },
-            assassin: { name: '🗡️ Sát Thủ', icon: '🗡️', hpPct: 0.8, dmgRatio: 55, radius: 18 },
-            marksman: { name: '🏹 Xạ Thủ', icon: '🏹', hpPct: 0.6, dmgRatio: 70, radius: 17 },
-            tank:     { name: '🛡️ Đỡ Đòn', icon: '🛡️', hpPct: 1.8, dmgRatio: 20, radius: 24 }
-        };
-
-        const defaultPlayersData = [
-            { id: 0, name: 'Xanh 1', team: 'blue', elo: 1500, role: 'fighter' },
-            { id: 1, name: 'Xanh 2', team: 'blue', elo: 1500, role: 'assassin' },
-            { id: 2, name: 'Xanh 3', team: 'blue', elo: 1500, role: 'marksman' },
-            { id: 3, name: 'Xanh 4', team: 'blue', elo: 1500, role: 'tank' },
-            { id: 4, name: 'Đỏ A', team: 'red', elo: 1500, role: 'fighter' },
-            { id: 5, name: 'Đỏ B', team: 'red', elo: 1500, role: 'assassin' },
-            { id: 6, name: 'Đỏ C', team: 'red', elo: 1500, role: 'marksman' },
-            { id: 7, name: 'Đỏ D', team: 'red', elo: 1500, role: 'tank' }
-        ];
-
-        let fighters = [];
-        let bullets = [];
-        let isStarted = false;
-        let isBoActive = false;
-        let matchSeconds = 0;
-        let timerInterval = null;
-
-        let zone = {
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            radius: canvas.width / 2 - 5,
-            maxRadius: canvas.width / 2 - 5,
-            minRadius: 60,
-            shrinkSpeed: 0.15
-        };
-
-        class Bullet {
-            constructor(x, y, targetX, targetY, damage, owner) {
-                this.x = x;
-                this.y = y;
-                this.damage = damage;
-                this.owner = owner;
-                this.radius = 4;
-                this.speed = 7.5;
-
-                const angle = Math.atan2(targetY - y, targetX - x);
-                this.vx = Math.cos(angle) * this.speed;
-                this.vy = Math.sin(angle) * this.speed;
-                this.isExpired = false;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-                    this.isExpired = true;
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.owner.team === 'blue' ? '#60a5fa' : '#f87171';
-                ctx.fill();
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            }
-        }
-
-        class Fighter {
-            constructor(id, name, team, elo, roleKey, initialLives) {
-                this.id = id;
-                this.name = name;
-                this.team = team;
-                this.elo = elo;
-                this.roleKey = roleKey;
-
-                const cfg = ROLE_CONFIGS[roleKey];
-                this.roleIcon = cfg.icon;
-                this.radius = cfg.radius;
-
-                this.maxHp = Math.round(elo * cfg.hpPct);
-                this.currentHp = this.maxHp;
-                
-                const baseDmg = Math.round(cfg.dmgRatio * (elo / 1000));
-                this.damage = roleKey === 'marksman' ? Math.round(baseDmg * 0.25) : baseDmg;
-                this.bulletDamage = baseDmg;
-
-                this.moveSpeed = BASE_SPEED;
-                this.lives = initialLives;
-
-                this.kills = 0;
-                this.deaths = 0;
-                this.assists = 0;
-
-                // LƯU LỊCH SỬ SÁT THƯƠNG ĐỂ TÍNH ASSIST 4.5S
-                this.recentDamageMap = new Map(); // attacker -> timestamp
-
-                this.isDead = false;
-                this.respawnTimer = 0;
-
-                // Kỹ năng & Bắn đạn
-                this.shootTimer = 0;
-                this.burstTimer = 0;
-                this.dashTimer = 0;
-                this.isDashing = false;
-
-                const angle = Math.random() * Math.PI * 2;
-                this.vx = Math.cos(angle) * this.moveSpeed;
-                this.vy = Math.sin(angle) * this.moveSpeed;
-
-                this.cooldowns = {};
-                this.resetPositionToSpawn();
-            }
-
-            resetPositionToSpawn() {
-                const sp = spawnZones[this.team];
-                this.x = sp.x + (Math.random() - 0.5) * 20;
-                this.y = sp.y + (Math.random() - 0.5) * 20;
-            }
-
-            draw() {
-                if (this.lives <= 0 && this.isDead) return;
-
-                if (this.isDead) {
-                    ctx.fillStyle = '#facc15';
-                    ctx.font = 'bold 12px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(`${this.name} (${this.respawnTimer}s)`, this.x, this.y);
-                    return;
-                }
-
-                const hpRatio = Math.max(0, this.currentHp / this.maxHp);
-                const isRagingFighter = (this.roleKey === 'fighter' && hpRatio < 0.3);
-
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.clip();
-
-                ctx.fillStyle = '#1e293b';
-                ctx.fillRect(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
-
-                const fillHeight = this.radius * 2 * hpRatio;
-                const fillY = (this.y + this.radius) - fillHeight;
-
-                ctx.fillStyle = this.team === 'blue' ? '#2563eb' : '#dc2626';
-                ctx.fillRect(this.x - this.radius, fillY, this.radius * 2, fillHeight);
-
-                ctx.restore();
-
-                // VIỀN NHÂN VẬT
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-
-                if (isRagingFighter) {
-                    // Đấu sĩ Thịnh Nộ: Viền đỏ phát sáng
-                    ctx.lineWidth = 4;
-                    ctx.strokeStyle = '#ef4444';
-                    ctx.shadowColor = '#ef4444';
-                    ctx.shadowBlur = 12;
-                } else if (this.isDashing) {
-                    // Sát thủ Lướt: Viền vàng
-                    ctx.lineWidth = 4;
-                    ctx.strokeStyle = '#facc15';
-                } else {
-                    ctx.lineWidth = 2.5;
-                    ctx.strokeStyle = '#ffffff';
-                }
-                ctx.stroke();
-                ctx.shadowBlur = 0; // Reset hiệu ứng phát sáng
-
-                ctx.fillStyle = '#ffffff';
-                ctx.font = `${this.radius * 0.85}px Arial`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(this.roleIcon, this.x, this.y);
-
-                ctx.font = 'bold 10px Arial';
-                ctx.textBaseline = 'alphabetic';
-                ctx.fillText(this.name, this.x, this.y - this.radius - 3);
-            }
-
-            update() {
-                if (this.isDead || this.lives <= 0) return;
-
-                if (isStarted) {
-                    // 1. XẠ THỦ: BAN ĐẠN VÀ NỘI ĐẠN 3 VIÊN MỖI 4 GIÂY
-                    if (this.roleKey === 'marksman') {
-                        this.shootTimer++;
-                        this.burstTimer++;
-
-                        if (this.burstTimer >= 240) { // Mỗi 4 giây bắn 3 viên
-                            this.burstTimer = 0;
-                            const enemy = this.findClosestEnemy();
-                            if (enemy) {
-                                for (let i = 0; i < 3; i++) {
-                                    setTimeout(() => {
-                                        if (!this.isDead) {
-                                            bullets.push(new Bullet(this.x, this.y, enemy.x, enemy.y, this.bulletDamage, this));
-                                        }
-                                    }, i * 120);
-                                }
-                            }
-                        } else if (this.shootTimer >= 60) { // Bắn thường 1s/viên
-                            this.shootTimer = 0;
-                            const enemy = this.findClosestEnemy();
-                            if (enemy) {
-                                bullets.push(new Bullet(this.x, this.y, enemy.x, enemy.y, this.bulletDamage, this));
-                            }
-                        }
-                    }
-
-                    // 2. SÁT THỦ: LƯỚT MỖI 4S
-                    if (this.roleKey === 'assassin') {
-                        this.dashTimer++;
-                        if (this.dashTimer >= 240) {
-                            this.triggerDash();
-                        }
-                    }
-
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    // Giữ trong Vòng Bo
-                    const dx = this.x - zone.x;
-                    const dy = this.y - zone.y;
-                    const distFromCenter = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distFromCenter + this.radius > zone.radius) {
-                        const angle = Math.atan2(dy, dx);
-                        this.x = zone.x + Math.cos(angle) * (zone.radius - this.radius);
-                        this.y = zone.y + Math.sin(angle) * (zone.radius - this.radius);
-
-                        const normalX = dx / distFromCenter;
-                        const normalY = dy / distFromCenter;
-                        const dot = this.vx * normalX + this.vy * normalY;
-
-                        this.vx -= 2 * dot * normalX;
-                        this.vy -= 2 * dot * normalY;
-                    }
-
-                    for (let k in this.cooldowns) {
-                        if (this.cooldowns[k] > 0) this.cooldowns[k]--;
-                    }
-                }
-            }
-
-            triggerDash() {
-                const target = this.findLowestHpEnemy();
-                if (target) {
-                    this.dashTimer = 0;
-                    this.isDashing = true;
-                    const angle = Math.atan2(target.y - this.y, target.x - this.x);
-                    this.vx = Math.cos(angle) * 8.5;
-                    this.vy = Math.sin(angle) * 8.5;
-                    setTimeout(() => {
-                        this.isDashing = false;
-                        const currAngle = Math.atan2(this.vy, this.vx);
-                        this.vx = Math.cos(currAngle) * BASE_SPEED;
-                        this.vy = Math.sin(currAngle) * BASE_SPEED;
-                    }, 400);
-                }
-            }
-
-            findClosestEnemy() {
-                let closest = null;
-                let minDist = Infinity;
-                fighters.forEach(f => {
-                    if (f.team !== this.team && !f.isDead) {
-                        const dist = Math.hypot(f.x - this.x, f.y - this.y);
-                        if (dist < minDist) {
-                            minDist = dist;
-                            closest = f;
-                        }
-                    }
-                });
-                return closest;
-            }
-
-            findLowestHpEnemy() {
-                let target = null;
-                let minHp = Infinity;
-                fighters.forEach(f => {
-                    if (f.team !== this.team && !f.isDead) {
-                        if (f.currentHp < minHp) {
-                            minHp = f.currentHp;
-                            target = f;
-                        }
-                    }
-                });
-                return target;
-            }
-
-            takeDamage(amount, attacker) {
-                if (this.isDead || this.lives <= 0) return;
-
-                // TÍNH TOÁN GIẢM SÁT THƯƠNG
-                let finalDamage = amount;
-
-                // 1. Sát thủ đang Lướt -> Chỉ nhận 25% Sát thương
-                if (this.roleKey === 'assassin' && this.isDashing) {
-                    finalDamage *= 0.25;
-                }
-
-                // 2. Đấu sĩ dưới 30% Máu -> Nhận giảm 25% Sát thương
-                if (this.roleKey === 'fighter' && (this.currentHp / this.maxHp) < 0.3) {
-                    finalDamage *= 0.75;
-                }
-
-                this.currentHp -= finalDamage;
-
-                // Lưu lịch sử thời gian gây sát thương để tính Hỗ Trợ 4.5s
-                if (attacker) {
-                    this.recentDamageMap.set(attacker.id, Date.now());
-                }
-
-                if (this.currentHp <= 0) {
-                    this.die(attacker);
-                }
-
-                updateHpBarUI(this.id, this.currentHp, this.maxHp, this.lives);
-            }
-
-            die(killer) {
-                this.isDead = true;
-                this.deaths++;
-                this.lives--;
-
-                const now = Date.now();
-
-                if (killer) {
-                    killer.kills++;
-                    // SÁT THỦ GIẾT MẠNG -> HỒI NGAY LƯỚT
-                    if (killer.roleKey === 'assassin') {
-                        killer.dashTimer = 240; 
-                    }
-
-                    // TÍNH HỖ TRỢ TRONG VÒNG 4.5 GIÂY GẦN NHẤT
-                    this.recentDamageMap.forEach((timestamp, attackerId) => {
-                        if (attackerId !== killer.id && (now - timestamp <= ASSIST_WINDOW_MS)) {
-                            const assistFighter = fighters.find(f => f.id === attackerId);
-                            if (assistFighter && assistFighter.team === killer.team) {
-                                assistFighter.assists++;
-                            }
-                        }
-                    });
-                }
-
-                this.recentDamageMap.clear();
-                this.resetPositionToSpawn();
-
-                updateHpBarUI(this.id, 0, this.maxHp, this.lives);
-                updateKdaTableUI();
-
-                if (this.lives > 0) {
-                    // THỜI GIAN HỒI SINH TĂNG DẦN
-                    const delayIdx = Math.min(this.deaths - 1, RESPAWN_DELAYS.length - 1);
-                    this.respawnTimer = RESPAWN_DELAYS[delayIdx];
-
-                    const timer = setInterval(() => {
-                        if (!isStarted) return;
-                        this.respawnTimer--;
-                        if (this.respawnTimer <= 0) {
-                            clearInterval(timer);
-                            this.respawn();
-                        }
-                    }, 1000);
-                }
-            }
-
-            respawn() {
-                if (this.lives <= 0) return;
-                this.isDead = false;
-                this.currentHp = this.maxHp;
-                this.resetPositionToSpawn();
-                updateHpBarUI(this.id, this.maxHp, this.maxHp, this.lives);
-            }
-
-            // CÔNG THỨC KDA ĐÃ TINH CHỈNH
-            getKdaScore() {
-                const score = (this.kills * 2.0) + (this.assists * 0.8) - (this.deaths * 1.0);
-                return Math.max(0, score).toFixed(1);
-            }
-        }
-
-        // LƯU CÀI ĐẶT VÀO LOCAL STORAGE
-        function saveSettingsToStorage() {
-            const data = {
-                globalLives: document.getElementById('global-lives').value,
-                blueTitle: document.getElementById('team-blue-title').value,
-                redTitle: document.getElementById('team-red-title').value,
-                players: []
-            };
-
-            for (let i = 0; i < 8; i++) {
-                data.players.push({
-                    id: i,
-                    name: document.getElementById(`name-${i}`).value,
-                    elo: document.getElementById(`elo-${i}`).value,
-                    role: document.getElementById(`role-${i}`).value
-                });
-            }
-
-            localStorage.setItem('moba_game_settings', JSON.stringify(data));
-        }
-
-        function loadSettingsFromStorage() {
-            const saved = localStorage.getItem('moba_game_settings');
-            if (!saved) return null;
-            try { return JSON.parse(saved); } catch (e) { return null; }
-        }
-
-        function createUI() {
-            const savedData = loadSettingsFromStorage();
-            if (savedData) {
-                document.getElementById('global-lives').value = savedData.globalLives || 5;
-                document.getElementById('team-blue-title').value = savedData.blueTitle || 'ĐỘI XANH';
-                document.getElementById('team-red-title').value = savedData.redTitle || 'ĐỘI ĐỎ';
-            }
-
-            const blueContainer = document.getElementById('blue-players-ui');
-            const redContainer = document.getElementById('red-players-ui');
-
-            blueContainer.innerHTML = '';
-            redContainer.innerHTML = '';
-
-            const playersList = savedData ? savedData.players : defaultPlayersData;
-
-            playersList.forEach((p, idx) => {
-                const team = idx < 4 ? 'blue' : 'red';
-                const html = `
-                    <div class="player-card">
-                        <div class="player-inputs-row">
-                            <input type="text" id="name-${p.id}" value="${p.name}" onchange="saveSettingsToStorage()">
-                            <input type="number" id="elo-${p.id}" value="${p.elo}" title="Elo" onchange="saveSettingsToStorage()">
-                            <select id="role-${p.id}" onchange="saveSettingsToStorage()">
-                                <option value="fighter" ${p.role==='fighter'?'selected':''}>⚔️ Đấu Sĩ</option>
-                                <option value="assassin" ${p.role==='assassin'?'selected':''}>🗡️ Sát Thủ</option>
-                                <option value="marksman" ${p.role==='marksman'?'selected':''}>🏹 Xạ Thủ</option>
-                                <option value="tank" ${p.role==='tank'?'selected':''}>🛡️ Đỡ Đòn</option>
-                            </select>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span class="lives-count" id="lives-${p.id}">Mạng: 5</span>
-                        </div>
-                        <div class="hp-bar-bg">
-                            <div class="hp-bar-fill" id="hp-bar-${p.id}"></div>
-                        </div>
-                    </div>
-                `;
-                if (team === 'blue') blueContainer.innerHTML += html;
-                else redContainer.innerHTML += html;
-            });
-        }
-
-        function updateHpBarUI(id, currentHp, maxHp, lives) {
-            const bar = document.getElementById(`hp-bar-${id}`);
-            const livesElem = document.getElementById(`lives-${id}`);
-            if (bar) {
-                const percentage = Math.max(0, (currentHp / maxHp) * 100);
-                bar.style.width = `${percentage}%`;
-            }
-            if (livesElem) {
-                livesElem.innerText = `Mạng: ${Math.max(0, lives)}`;
-            }
-        }
-
-        function updateKdaTableUI() {
-            const blueBody = document.getElementById('kda-blue-body');
-            const redBody = document.getElementById('kda-red-body');
-
-            blueBody.innerHTML = '';
-            redBody.innerHTML = '';
-
-            let totalBlueKills = 0;
-            let totalRedKills = 0;
-
-            fighters.forEach(f => {
-                if (f.team === 'blue') totalBlueKills += f.kills;
-                else totalRedKills += f.kills;
-
-                const row = `
-                    <tr>
-                        <td>${f.roleIcon} ${f.name}</td>
-                        <td>${f.kills}/${f.deaths}/${f.assists}</td>
-                        <td style="font-weight:bold; color:#facc15">${f.getKdaScore()}</td>
-                    </tr>
-                `;
-                if (f.team === 'blue') blueBody.innerHTML += row;
-                else redBody.innerHTML += row;
-            });
-
-            const blueTitle = document.getElementById('team-blue-title').value;
-            const redTitle = document.getElementById('team-red-title').value;
-
-            document.getElementById('total-blue-kills').innerText = `${blueTitle.toUpperCase()}: ${totalBlueKills}`;
-            document.getElementById('total-red-kills').innerText = `${totalRedKills} :${redTitle.toUpperCase()}`;
-        }
-
-        function triggerZoneShrink() {
-            if (!isStarted) {
-                alert("Vui lòng bấm BẮT ĐẦU trận đấu trước khi kích hoạt Bo!");
-                return;
-            }
-            isBoActive = true;
-            document.getElementById('bo-btn').innerText = '⚠️ BO ĐANG THU HẸP!';
-            document.getElementById('bo-btn').style.background = '#991b1b';
-        }
-
-        function resetGame() {
-            isStarted = false;
-            isBoActive = false;
-            matchSeconds = 0;
-            if (timerInterval) clearInterval(timerInterval);
-
-            document.getElementById('start-btn').innerText = '▶ BẮT ĐẦU';
-            document.getElementById('start-btn').className = 'btn-start';
-            document.getElementById('bo-btn').innerText = '🔴 BẮT ĐẦU THU BO (TRỌNG TÀI)';
-            document.getElementById('bo-btn').style.background = '#e11d48';
-            document.getElementById('match-timer').innerText = '⏱️ 00:00';
-
-            zone.radius = zone.maxRadius;
-            fighters = [];
-            bullets = [];
-
-            const globalLives = parseInt(document.getElementById('global-lives').value) || 5;
-
-            for (let i = 0; i < 8; i++) {
-                const team = i < 4 ? 'blue' : 'red';
-                const nameVal = document.getElementById(`name-${i}`).value;
-                const eloVal = parseFloat(document.getElementById(`elo-${i}`).value) || 1000;
-                const roleVal = document.getElementById(`role-${i}`).value;
-
-                const f = new Fighter(i, nameVal, team, eloVal, roleVal, globalLives);
-                fighters.push(f);
-                updateHpBarUI(i, f.maxHp, f.maxHp, globalLives);
-            }
-
-            updateKdaTableUI();
-            saveSettingsToStorage();
-        }
-
-        function toggleStart() {
-            isStarted = !isStarted;
-            const btn = document.getElementById('start-btn');
-
-            if (isStarted) {
-                btn.innerText = '⏸️ TẠM DỪNG';
-                btn.className = 'btn-reset';
-
-                if (!timerInterval) {
-                    timerInterval = setInterval(() => {
-                        if (!isStarted) return;
-                        matchSeconds++;
-                        const mins = String(Math.floor(matchSeconds / 60)).padStart(2, '0');
-                        const secs = String(matchSeconds % 60).padStart(2, '0');
-                        document.getElementById('match-timer').innerText = `⏱️ ${mins}:${secs}`;
-                    }, 1000);
-                }
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeToggleBtn');
+            body.classList.toggle('light-mode');
+            if (body.classList.contains('light-mode')) {
+                btn.textContent = '☀️';
             } else {
-                btn.innerText = '▶ BẮT ĐẦU';
-                btn.className = 'btn-start';
+                btn.textContent = '🌙';
             }
         }
 
-        function handleCollisions() {
-            // 1. Va chạm Nhân vật với Nhân vật
-            for (let i = 0; i < fighters.length; i++) {
-                for (let j = i + 1; j < fighters.length; j++) {
-                    let f1 = fighters[i];
-                    let f2 = fighters[j];
+        function handleLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
 
-                    if (f1.isDead || f2.isDead) continue;
-
-                    let dx = f2.x - f1.x;
-                    let dy = f2.y - f1.y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < f1.radius + f2.radius) {
-                        if (f1.team === f2.team) continue;
-
-                        f1.vx *= -1; f1.vy *= -1;
-                        f2.vx *= -1; f2.vy *= -1;
-
-                        if (isStarted && !f1.cooldowns[f2.id]) {
-                            // TÍNH SÁT THƯƠNG VA CHẠM CÓ TÍNH SKILL
-                            let dmg1 = f1.damage;
-                            let dmg2 = f2.damage;
-
-                            // Sát thủ Lướt -> Nhân đôi dame gây ra
-                            if (f1.isDashing) dmg1 *= 2;
-                            if (f2.isDashing) dmg2 *= 2;
-
-                            // Đấu sĩ Thịnh Nộ (< 30% HP) -> Tăng 50% dame gây ra
-                            if (f1.roleKey === 'fighter' && (f1.currentHp / f1.maxHp) < 0.3) dmg1 *= 1.5;
-                            if (f2.roleKey === 'fighter' && (f2.currentHp / f2.maxHp) < 0.3) dmg2 *= 1.5;
-
-                            f2.takeDamage(dmg1, f1);
-                            f1.takeDamage(dmg2, f2);
-
-                            f1.cooldowns[f2.id] = 18;
-                            f2.cooldowns[f1.id] = 18;
-                        }
-                    }
-                }
-            }
-
-            // 2. Va chạm Đạn Xạ Thủ với Nhân vật
-            for (let b = bullets.length - 1; b >= 0; b--) {
-                let bullet = bullets[b];
-                bullet.update();
-
-                if (bullet.isExpired) {
-                    bullets.splice(b, 1);
-                    continue;
-                }
-
-                for (let f of fighters) {
-                    if (f.team !== bullet.owner.team && !f.isDead) {
-                        let dist = Math.hypot(f.x - bullet.x, f.y - bullet.y);
-                        if (dist < f.radius + bullet.radius) {
-                            f.takeDamage(bullet.damage, bullet.owner);
-                            bullets.splice(b, 1);
-                            break;
-                        }
-                    }
-                }
+            if (user === '12367' && pass === '12367') {
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = 'home.html';
+            } else {
+                const errorEl = document.getElementById('errorMsg');
+                errorEl.style.display = 'block';
             }
         }
-
-        function checkGameOver() {
-            if (!isStarted) return;
-
-            const blueFighters = fighters.filter(f => f.team === 'blue');
-            const redFighters = fighters.filter(f => f.team === 'red');
-
-            const blueAllDeadNow = blueFighters.every(f => f.isDead);
-            const redAllDeadNow = redFighters.every(f => f.isDead);
-
-            const blueAllOut = blueFighters.every(f => f.lives <= 0 && f.isDead);
-            const redAllOut = redFighters.every(f => f.lives <= 0 && f.isDead);
-
-            if (blueAllDeadNow || blueAllOut) {
-                endGame('red');
-            } else if (redAllDeadNow || redAllOut) {
-                endGame('blue');
-            }
-        }
-
-        function endGame(winningTeam) {
-            isStarted = false;
-            clearInterval(timerInterval);
-            timerInterval = null;
-            showResults(winningTeam);
-        }
-
-        function showResults(winningTeam) {
-            const modal = document.getElementById('result-modal');
-            const winnerText = document.getElementById('winner-text');
-            const mvpWinText = document.getElementById('mvp-win-text');
-            const mvpLoseText = document.getElementById('mvp-lose-text');
-            const statsBody = document.getElementById('stats-body');
-
-            const blueTitle = document.getElementById('team-blue-title').value;
-            const redTitle = document.getElementById('team-red-title').value;
-            const losingTeam = winningTeam === 'blue' ? 'red' : 'blue';
-
-            winnerText.innerText = winningTeam === 'blue' 
-                ? `🎉 ${blueTitle.toUpperCase()} CHIẾN THẮNG!` 
-                : `🎉 ${redTitle.toUpperCase()} CHIẾN THẮNG!`;
-            winnerText.className = `winner-title ${winningTeam === 'blue' ? 'text-blue' : 'text-red'}`;
-
-            const winners = fighters.filter(f => f.team === winningTeam);
-            let mvpWin = winners[0];
-            winners.forEach(f => {
-                if (parseFloat(f.getKdaScore()) > parseFloat(mvpWin.getKdaScore())) mvpWin = f;
-            });
-
-            const losers = fighters.filter(f => f.team === losingTeam);
-            let mvpLose = losers[0];
-            losers.forEach(f => {
-                if (parseFloat(f.getKdaScore()) > parseFloat(mvpLose.getKdaScore())) mvpLose = f;
-            });
-
-            mvpWinText.innerText = `👑 MVP Thắng: ${mvpWin.roleIcon} ${mvpWin.name} (${mvpWin.kills}/${mvpWin.deaths}/${mvpWin.assists})`;
-            mvpLoseText.innerText = `🎖️ MVP Bại: ${mvpLose.roleIcon} ${mvpLose.name} (${mvpLose.kills}/${mvpLose.deaths}/${mvpLose.assists})`;
-
-            statsBody.innerHTML = '';
-            fighters.forEach(f => {
-                let badge = '';
-                if (f.id === mvpWin.id) badge = '👑';
-                else if (f.id === mvpLose.id) badge = '🎖️';
-
-                const row = `
-                    <tr>
-                        <td><b>${f.roleIcon} ${f.name}</b> ${badge}</td>
-                        <td class="${f.team === 'blue' ? 'text-blue' : 'text-red'}">
-                            ${f.team === 'blue' ? blueTitle : redTitle}
-                        </td>
-                        <td>${f.kills} / ${f.deaths} / ${f.assists}</td>
-                        <td style="font-weight:bold; color:#facc15">${f.getKdaScore()}</td>
-                    </tr>
-                `;
-                statsBody.innerHTML += row;
-            });
-
-            modal.style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('result-modal').style.display = 'none';
-        }
-
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // 1. Ô Hồi Sinh
-            ctx.beginPath();
-            ctx.arc(spawnZones.blue.x, spawnZones.blue.y, spawnZones.blue.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(37, 99, 235, 0.15)';
-            ctx.fill();
-            ctx.strokeStyle = '#2563eb';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.arc(spawnZones.red.x, spawnZones.red.y, spawnZones.red.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(220, 38, 38, 0.15)';
-            ctx.fill();
-            ctx.strokeStyle = '#dc2626';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // 2. Vòng Bo
-            ctx.beginPath();
-            ctx.arc(zone.x, zone.y, zone.radius, 0, Math.PI * 2);
-            ctx.strokeStyle = isBoActive ? '#ef4444' : '#eab308';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([8, 4]);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            if (isStarted && isBoActive && zone.radius > zone.minRadius) {
-                zone.radius -= zone.shrinkSpeed;
-            }
-
-            // 3. Đạn Xạ Thủ
-            bullets.forEach(b => b.draw());
-
-            // 4. Tuyển thủ
-            fighters.forEach(f => {
-                f.update();
-                f.draw();
-            });
-
-            handleCollisions();
-            checkGameOver();
-
-            requestAnimationFrame(gameLoop);
-        }
-
-        createUI();
-        resetGame();
-        gameLoop();
     </script>
 </body>
 </html>
