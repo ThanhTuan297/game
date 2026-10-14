@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Luyện Viết - VOCZ Gaming English</title>
+  <meta name="theme-color" content="#0f1117">
+
+  <script>
+    try {
+      var savedTheme = localStorage.getItem('vocz-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    } catch (e) {}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root,
+    :root[data-theme="dark"] {
+      --bg: #0f1117;
+      --card: #1a1d26;
+      --card-deep: #141720;
+      --border: #2a2f3d;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #ff3b5c;
+      --accent-deep: #e60033;
+      --accent-soft: rgba(255, 59, 92, 0.12);
+      --glow: rgba(255, 59, 92, 0.28);
+      --ok: #5fb985;
+      --ok-soft: rgba(95, 185, 133, 0.14);
+      --ok-glow: rgba(95, 185, 133, 0.28);
+      --shadow: rgba(0, 0, 0, 0.4);
+      --header-bg: rgba(15, 17, 23, 0.82);
+      --dragon-a: #ffffff;
+      --dragon-b: #e2e8f0;
+      --dragon-c: #94a3b8;
+      --brand-a: #f1f5f9;
+      --scroll-thumb: #2a2f3d;
+      color-scheme: dark;
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --card-deep: #f1f5f9;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #dc2626;
+      --accent-deep: #b91c1c;
+      --accent-soft: rgba(220, 38, 38, 0.09);
+      --glow: rgba(220, 38, 38, 0.2);
+      --ok: #1f8a52;
+      --ok-soft: rgba(31, 138, 82, 0.1);
+      --ok-glow: rgba(31, 138, 82, 0.22);
+      --shadow: rgba(15, 23, 42, 0.1);
+      --header-bg: rgba(248, 250, 252, 0.86);
+      --dragon-a: #1f2433;
+      --dragon-b: #3a4260;
+      --dragon-c: #6b7694;
+      --brand-a: #0f172a;
+      --scroll-thumb: #cbd5e1;
+      color-scheme: light;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color .3s ease, color .3s ease;
+    }
+
+    a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ---------- Header ---------- */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 0 clamp(14px, 3vw, 32px);
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border);
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      transition: background-color .3s ease, border-color .3s ease;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; min-width: 0; text-decoration: none; }
+    .dragon-emblem { width: 40px; height: 40px; flex: none; filter: drop-shadow(0 0 6px var(--glow)); animation: floatDragon 3s ease-in-out infinite; }
+    .logo-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .brand-name {
+      font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; line-height: 1;
+      background: linear-gradient(135deg, var(--brand-a) 30%, var(--accent) 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand-name span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+    .brand-sub { font-size: .8125rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    @keyframes floatDragon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+    .right { display: flex; align-items: center; gap: 10px; }
+    .icon-btn {
+      width: 44px; height: 44px; display: grid; place-items: center; border-radius: 999px;
+      background: var(--card); border: 1px solid var(--border); color: var(--text);
+      font-size: 1.125rem; cursor: pointer;
+      transition: border-color .2s ease, box-shadow .2s ease, background-color .3s ease;
+    }
+    .icon-btn:hover { border-color: var(--accent); box-shadow: 0 0 14px var(--glow); }
+    .avatar-btn {
+      display: block; width: 44px; height: 44px; padding: 2px; border-radius: 999px; overflow: hidden;
+      border: 2px solid var(--accent); background: var(--card);
+      transition: box-shadow .2s ease;
+    }
+    .avatar-btn:hover { box-shadow: 0 0 14px var(--glow); }
+    .avatar-btn img { width: 100%; height: 100%; display: block; border-radius: 999px; object-fit: cover; }
+
+    /* ---------- Trang ---------- */
+    main { max-width: 760px; margin: 0 auto; padding: 32px clamp(14px, 4vw, 24px) 64px; }
+
+    .meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .topic {
+      display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 999px;
+      background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent);
+      font-size: .78rem; font-weight: 700;
+    }
+    .counter { font-size: .875rem; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .counter b { color: var(--text); }
+    .counter .pts { color: var(--ok); margin-left: 10px; }
+    .bar { height: 5px; border-radius: 5px; background: var(--border); overflow: hidden; margin-bottom: 20px; }
+    .bar i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 5px; transition: width .4s ease; }
+
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: clamp(20px, 5vw, 36px); transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease; }
+
+    .sheet.is-correct { border-color: var(--ok); box-shadow: 0 0 28px var(--ok-glow); }
+
+    .q-row { display: flex; gap: 14px; align-items: baseline; }
+    .q-num { flex: none; font-size: clamp(1.5rem, 4.5vw, 2rem); font-weight: 900; color: var(--accent); font-variant-numeric: tabular-nums; transition: color .3s ease; }
+    .q-text { font-size: clamp(1.1rem, 3vw, 1.35rem); font-weight: 700; line-height: 1.55; }
+    .sheet.is-correct .q-num { color: var(--ok); }
+
+    .hints-block { margin: 20px 0 8px; padding: 14px 16px; border-radius: 14px; background: var(--card-deep); transition: background-color .3s ease; }
+    .hints-label { display: block; margin-bottom: 10px; font-size: .78rem; font-weight: 700; letter-spacing: .06em; color: var(--muted); }
+    .hints { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+    .hint {
+      display: inline-flex; align-items: baseline; gap: 6px; padding: 6px 12px; border-radius: 10px;
+      background: var(--card); border: 1px solid var(--border);
+      font-size: .9rem; line-height: 1.4;
+    }
+    .hint .vi { font-style: italic; font-weight: 500; color: var(--muted); }
+    .hint .eq { color: var(--accent); font-weight: 700; }
+    .hint .en { font-weight: 700; }
+    .hint.fresh { animation: pop .45s ease; border-color: var(--accent); }
+    .hint.locked { border-style: dashed; color: var(--muted); font-weight: 600; letter-spacing: .2em; }
+    @keyframes pop {
+      0% { transform: scale(.8); opacity: 0; box-shadow: 0 0 0 0 var(--glow); }
+      60% { transform: scale(1.06); opacity: 1; box-shadow: 0 0 18px var(--glow); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+    }
+    .hints-note { margin-top: 10px; font-size: .8125rem; color: var(--muted); }
+
+    .answer-row { display: flex; gap: 12px; align-items: flex-end; margin-top: 22px; }
+    .answer {
+      flex: 1; min-width: 0; height: 48px; padding: 0 4px;
+      background: transparent; color: var(--text);
+      border: 0; border-bottom: 2px solid var(--border); border-radius: 0;
+      font: 500 1rem 'Be Vietnam Pro', system-ui, sans-serif;
+      transition: border-color .2s ease;
+    }
+    .answer::placeholder { color: var(--muted); opacity: .7; }
+    .answer:focus { outline: none; border-bottom-color: var(--accent); }
+    .answer:read-only { border-bottom-color: var(--ok); }
+    .answer-row.shake { animation: shake .45s ease; }
+    .answer-row.shake .answer { border-bottom-color: var(--accent); }
+    @keyframes shake {
+      10%, 90% { transform: translateX(-2px); }
+      20%, 80% { transform: translateX(4px); }
+      30%, 50%, 70% { transform: translateX(-7px); }
+      40%, 60% { transform: translateX(7px); }
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 24px;
+      border-radius: 14px; border: 1px solid var(--border); background: var(--card); color: var(--text);
+      font: 700 .95rem 'Be Vietnam Pro', system-ui, sans-serif; text-decoration: none; cursor: pointer;
+      transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); box-shadow: 0 6px 18px var(--glow); }
+
+    .feedback { min-height: 1.5em; margin-top: 14px; font-weight: 600; line-height: 1.5; }
+    .feedback.bad { color: var(--accent); }
+    .feedback.ok { color: var(--ok); }
+
+    .done-box { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 8px; padding-top: 18px; border-top: 1px dashed var(--border); }
+    .model { flex: 1 1 260px; font-size: .9rem; line-height: 1.6; color: var(--muted); }
+    .model b { color: var(--text); font-weight: 600; }
+
+    /* ---------- Kết quả ---------- */
+    .result { text-align: center; }
+    .result h2 { font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 800; margin-bottom: 20px; }
+    .big { font-size: clamp(3.2rem, 14vw, 5rem); font-weight: 900; color: var(--accent); line-height: 1; font-variant-numeric: tabular-nums; }
+    .big-label { margin-top: 6px; font-size: .9rem; color: var(--muted); }
+    .summary { display: flex; justify-content: center; gap: 32px; margin: 24px 0 28px; flex-wrap: wrap; }
+    .summary div { font-size: .85rem; color: var(--muted); }
+    .summary b { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+    .summary .ok b { color: var(--ok); }
+    .actions { display: grid; gap: 10px; max-width: 360px; margin: 0 auto; }
+
+    .error-box { text-align: center; line-height: 1.7; }
+    .error-box code { padding: 2px 6px; border-radius: 6px; background: var(--card-deep); font-size: .9em; }
+
+    @media (max-width: 639px) {
+      .brand-sub { display: none; }
+      .answer-row { flex-direction: column; align-items: stretch; gap: 14px; }
+      .answer-row .btn { width: 100%; }
+      .done-box .btn { width: 100%; }
+      .q-row { gap: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="home.html" class="logo" aria-label="VOCZ Gaming English - Trang chủ">
+      <svg class="dragon-emblem" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="whiteDragon" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color: var(--dragon-a)"/>
+            <stop offset="50%" style="stop-color: var(--dragon-b)"/>
+            <stop offset="100%" style="stop-color: var(--dragon-c)"/>
+          </linearGradient>
+          <linearGradient id="glowRed" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff3b5c"/>
+            <stop offset="100%" stop-color="#e60033"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 15 L65 35 L85 25 L75 50 L95 65 L70 70 L65 90 L50 75 L35 90 L30 70 L5 65 L25 50 L15 25 L35 35 Z" fill="url(#whiteDragon)" opacity="0.15"/>
+        <path d="M50 10 C45 20 35 25 25 20 C35 35 45 40 48 55 C40 55 30 50 20 60 C35 65 45 65 50 85 C55 65 65 65 80 60 C70 50 60 55 52 55 C55 40 65 35 75 20 C65 25 55 20 50 10 Z" fill="url(#whiteDragon)"/>
+        <circle cx="43" cy="28" r="3" fill="url(#glowRed)"/>
+        <circle cx="57" cy="28" r="3" fill="url(#glowRed)"/>
+      </svg>
+      <div class="logo-text">
+        <div class="brand-name">VOC<span>Z</span></div>
+        <div class="brand-sub">Gaming English</div>
+      </div>
+    </a>
+
+    <div class="right">
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="Chuyển sang giao diện sáng">
+        <span id="themeIcon" aria-hidden="true">☀️</span>
+      </button>
+      <a href="user.html" class="avatar-btn" title="Hồ sơ của bạn" aria-label="Chi tiết hồ sơ">
+        <img id="avatarImg" src="https://api.dicebear.com/9.x/bottts/svg?seed=VOCZ1" alt="Avatar của bạn" width="40" height="40">
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section id="loadError" class="panel error-box" hidden>
+      <p>Không tải được file <code>wri.js</code>. Hãy mở trang qua máy chủ web (http/https) và đặt <code>wri.js</code> cùng thư mục với <code>write.html</code>.</p>
+    </section>
+
+    <section id="quiz" hidden>
+      <div class="meta">
+        <span class="topic" id="topic"></span>
+        <span class="counter">Câu <b id="counter">01/01</b><span class="pts" id="score">+0 điểm</span></span>
+      </div>
+      <div class="bar" id="bar" role="progressbar" aria-label="Tiến trình" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+
+      <article class="panel sheet" id="sheet">
+        <div class="q-row">
+          <span class="q-num" id="qNum">01.</span>
+          <p class="q-text" id="qText"></p>
+        </div>
+
+        <div class="hints-block">
+          <span class="hints-label">TỪ GỢI Ý</span>
+          <ul class="hints" id="hints"></ul>
+          <p class="hints-note" id="hintsNote"></p>
+        </div>
+
+        <form id="answerForm" novalidate>
+          <label class="sr-only" for="answer">Câu trả lời tiếng Anh</label>
+          <div class="answer-row" id="answerRow">
+            <input id="answer" class="answer" type="text" lang="en" placeholder="Viết câu tiếng Anh của bạn..." autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
+            <button type="submit" class="btn btn-primary" id="submitBtn">Nộp bài</button>
+          </div>
+        </form>
+
+        <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+
+        <div class="done-box" id="doneBox" hidden>
+          <p class="model">Đáp án chuẩn: <b id="modelAns"></b></p>
+          <button type="button" class="btn btn-primary" id="nextBtn">Câu tiếp theo</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="result" class="panel result" hidden>
+      <h2>Hoàn thành bài viết!</h2>
+      <div class="big" id="rPoints">0</div>
+      <div class="big-label">Lực Chiến Writing nhận được</div>
+      <div class="summary">
+        <div class="ok"><b id="rFirst">0</b>Đúng ngay lần đầu</div>
+        <div><b id="rTotal">0</b>Tổng số câu</div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="restartBtn">Làm lại bài viết</button>
+        <a href="home.html" class="btn">Về trang chủ</a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    const $ = id => document.getElementById(id);
+    const root = document.documentElement;
+
+    /* ---------- Cấu hình điểm ---------- */
+    const POINTS_BASE = 10;      // đúng ngay lần đầu
+    const POINTS_PENALTY = 2;    // trừ mỗi lần sai
+    const POINTS_MIN = 2;
+    const WRITE_KEY = "vocz_write_daily_cp"; // cộng dồn
+    const POWER_KEYS = [
+      "vocz_vocab_cp",
+      "vocz_lis_daily_cp", "vocz_read_daily_cp", "vocz_write_daily_cp", "vocz_speak_daily_cp",
+      "vocz_lis_best_cp", "vocz_read_best_cp", "vocz_write_best_cp", "vocz_speak_best_cp",
+      "vocz_pvp_best_cp"
+    ];
+
+    const read = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+    const write = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+    const readCP = k => { const n = parseInt(read(k), 10); return isNaN(n) || n < 0 ? 0 : n; };
+
+    /* ---------- Giao diện sáng/tối + avatar ---------- */
+    const themeBtn = $("themeToggle");
+    const themeIcon = $("themeIcon");
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      const dark = theme === "dark";
+      themeIcon.textContent = dark ? "☀️" : "🌙";
+      themeBtn.setAttribute("aria-label", dark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối");
+      if (metaTheme) metaTheme.setAttribute("content", dark ? "#0f1117" : "#f8fafc");
+    }
+    applyTheme(root.getAttribute("data-theme") === "light" ? "light" : "dark");
+    themeBtn.addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+      write("vocz-theme", next);
+    });
+
+    function syncAvatar() {
+      const v = read("vocz-avatar") || "VOCZ1";
+      const src = /^(https?:|data:|\/|\.)/.test(v) ? v : "https://api.dicebear.com/9.x/bottts/svg?seed=" + encodeURIComponent(v);
+      if ($("avatarImg").getAttribute("src") !== src) $("avatarImg").setAttribute("src", src);
+    }
+    syncAvatar();
+    window.addEventListener("storage", syncAvatar);
+    window.addEventListener("pageshow", syncAvatar);
+
+    function addPoints(n) {
+      write(WRITE_KEY, String(readCP(WRITE_KEY) + n));
+      write("vocz-power", String(POWER_KEYS.reduce((s, k) => s + readCP(k), 0)));
+    }
+
+    /* ---------- Xử lý chuỗi ---------- */
+    const normalize = s => String(s)
+      .toLowerCase()
+      .replace(/[\u2018\u2019\u02bc]/g, "'")
+      .replace(/[.,!?;:"“”()]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    function parseHint(str) {
+      const i = str.indexOf("=");
+      return i === -1 ? { vi: "", en: str.trim() } : { vi: str.slice(0, i).trim(), en: str.slice(i + 1).trim() };
+    }
+    const pad = n => String(n).padStart(2, "0");
+    const initialReveal = n => Math.ceil(n / 2);
+
+    /* ---------- Tải dữ liệu ---------- */
+    let topics = [];
+    try {
+      const mod = await import("./wri.js");
+      const raw = Array.isArray(mod.default) ? mod.default : [];
+      topics = raw
+        .map(t => ({
+          topic: t.topic || "",
+          prompt: t.prompt ?? t.vi ?? "",
+          answer: t.sampleAnswer ?? t.en ?? "",
+          hints: Array.isArray(t.hints) ? t.hints : []
+        }))
+        .filter(t => t.prompt && t.answer);
+      if (!topics.length) throw new Error("empty");
+    } catch (e) {
+      $("loadError").hidden = false;
+    }
+
+    if (topics.length) {
+      let idx = 0, wrong = 0, revealed = 0, solved = false;
+      let sessionPoints = 0, firstTry = 0;
+      const answerEl = $("answer");
+      const canAutofocus = window.matchMedia("(hover: hover)").matches;
+
+      function renderHints(freshIndex) {
+        const q = topics[idx];
+        const list = $("hints");
+        list.replaceChildren();
+        q.hints.forEach((h, i) => {
+          const li = document.createElement("li");
+          if (i < revealed) {
+            const p = parseHint(h);
+            li.className = "hint" + (i === freshIndex ? " fresh" : "");
+            if (p.vi) {
+              const vi = document.createElement("span"); vi.className = "vi"; vi.textContent = p.vi;
+              const eq = document.createElement("span"); eq.className = "eq"; eq.textContent = "=";
+              li.append(vi, eq);
+            }
+            const en = document.createElement("span"); en.className = "en"; en.textContent = p.en;
+            li.append(en);
+          } else {
+            li.className = "hint locked";
+            li.textContent = "•••";
+            li.setAttribute("aria-label", "Gợi ý đang ẩn");
+          }
+          list.appendChild(li);
+        });
+        const hidden = q.hints.length - revealed;
+        $("hintsNote").textContent = hidden > 0 ? "Còn " + hidden + " gợi ý ẩn, mỗi lần gõ sai sẽ mở thêm 1 gợi ý." : "";
+        $("hintsNote").hidden = hidden <= 0;
+      }
+
+      function updateMeta() {
+        const done = idx + (solved ? 1 : 0);
+        const pct = (done / topics.length) * 100;
+        $("counter").textContent = pad(idx + 1) + "/" + pad(topics.length);
+        $("score").textContent = "+" + sessionPoints + " điểm";
+        $("barFill").style.width = pct + "%";
+        $("bar").setAttribute("aria-valuenow", Math.round(pct));
+      }
+
+      function renderQuestion() {
+        const q = topics[idx];
+        wrong = 0;
+        solved = false;
+        revealed = q.hints.length ? initialReveal(q.hints.length) : 0;
+
+        $("sheet").classList.remove("is-correct");
+        $("topic").textContent = q.topic;
+        $("topic").hidden = !q.topic;
+        $("qNum").textContent = pad(idx + 1) + ".";
+        $("qText").textContent = q.prompt;
+        $("hints").closest(".hints-block").hidden = !q.hints.length;
+        renderHints(-1);
+
+        answerEl.value = "";
+        answerEl.readOnly = false;
+        $("submitBtn").hidden = false;
+        $("doneBox").hidden = true;
+        $("feedback").textContent = "";
+        $("feedback").className = "feedback";
+        updateMeta();
+        if (canAutofocus) answerEl.focus();
+      }
+
+      function onWrong() {
+        wrong++;
+        const row = $("answerRow");
+        row.classList.remove("shake");
+        void row.offsetWidth;
+        row.classList.add("shake");
+
+        const q = topics[idx];
+        let revealedNew = false;
+        if (revealed < q.hints.length) {
+          revealed++;
+          revealedNew = true;
+          renderHints(revealed - 1);
+        }
+        const fb = $("feedback");
+        fb.className = "feedback bad";
+        fb.textContent = "Chưa đúng, hãy thử lại." + (revealedNew ? " Đã mở thêm 1 gợi ý." : "");
+        answerEl.focus();
+        answerEl.select();
+      }
+
+      function onCorrect() {
+        solved = true;
+        const pts = Math.max(POINTS_MIN, POINTS_BASE - wrong * POINTS_PENALTY);
+        if (wrong === 0) firstTry++;
+        sessionPoints += pts;
+        addPoints(pts);
+
+        const q = topics[idx];
+        answerEl.readOnly = true;
+        $("submitBtn").hidden = true;
+        $("sheet").classList.add("is-correct");
+        const fb = $("feedback");
+        fb.className = "feedback ok";
+        fb.textContent = "Chính xác! +" + pts + " Lực Chiến Writing";
+        $("modelAns").textContent = q.answer;
+        $("nextBtn").textContent = idx === topics.length - 1 ? "Xem kết quả" : "Câu tiếp theo";
+        $("doneBox").hidden = false;
+        updateMeta();
+        $("nextBtn").focus();
+      }
+
+      $("answerForm").addEventListener("submit", e => {
+        e.preventDefault();
+        if (solved) return;
+        const val = normalize(answerEl.value);
+        const fb = $("feedback");
+        if (!val) {
+          fb.className = "feedback bad";
+          fb.textContent = "Hãy nhập câu trả lời của bạn.";
+          answerEl.focus();
+          return;
+        }
+        if (val === normalize(topics[idx].answer)) onCorrect(); else onWrong();
+      });
+
+      function showResult() {
+        $("quiz").hidden = true;
+        $("rPoints").textContent = "+" + sessionPoints;
+        $("rFirst").textContent = firstTry;
+        $("rTotal").textContent = topics.length;
+        $("result").hidden = false;
+        window.scrollTo(0, 0);
+      }
+
+      $("nextBtn").addEventListener("click", () => {
+        if (idx === topics.length - 1) return showResult();
+        idx++;
+        renderQuestion();
+        window.scrollTo(0, 0);
+      });
+
+      $("restartBtn").addEventListener("click", () => {
+        idx = 0; sessionPoints = 0; firstTry = 0;
+        $("result").hidden = true;
+        $("quiz").hidden = false;
+        renderQuestion();
+        window.scrollTo(0, 0);
+      });
+
+      $("quiz").hidden = false;
+      renderQuestion();
+    }
+  </script>
+</body>
+</html>
