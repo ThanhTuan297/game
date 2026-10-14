@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Thao Trường Từ Vựng - VOCZ Gaming English</title>
+  <meta name="theme-color" content="#0f1117">
+
+  <script>
+    try {
+      var savedTheme = localStorage.getItem('vocz-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    } catch (e) {}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root,
+    :root[data-theme="dark"] {
+      --bg: #0f1117;
+      --card: #1a1d26;
+      --card-deep: #141720;
+      --border: #2a2f3d;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --placeholder: #626a7a;
+      --accent: #ff3b5c;
+      --accent-deep: #e60033;
+      --accent-soft: rgba(255, 59, 92, 0.12);
+      --glow: rgba(255, 59, 92, 0.22);
+      --ok: #5fb985;
+      --ok-soft: rgba(95, 185, 133, 0.18);
+      --bad: #e0554f;
+      --bad-soft: rgba(224, 85, 79, 0.18);
+      --shadow: rgba(0, 0, 0, 0.4);
+      --header-bg: rgba(15, 17, 23, 0.82);
+      --dragon-a: #ffffff;
+      --dragon-b: #e2e8f0;
+      --dragon-c: #94a3b8;
+      --brand-a: #f1f5f9;
+      --scroll-thumb: #2a2f3d;
+      color-scheme: dark;
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f3f4f8;
+      --card: #ffffff;
+      --card-deep: #eef0f5;
+      --border: #dfe2ea;
+      --text: #14161d;
+      --muted: #566074;
+      --placeholder: #8a93a6;
+      --accent: #e0203f;
+      --accent-deep: #c4002b;
+      --accent-soft: rgba(224, 32, 63, 0.09);
+      --glow: rgba(224, 32, 63, 0.16);
+      --ok: #1f8a52;
+      --ok-soft: rgba(31, 138, 82, 0.12);
+      --bad: #c93a34;
+      --bad-soft: rgba(201, 58, 52, 0.12);
+      --shadow: rgba(20, 22, 29, 0.1);
+      --header-bg: rgba(243, 244, 248, 0.86);
+      --dragon-a: #1f2433;
+      --dragon-b: #3a4260;
+      --dragon-c: #6b7694;
+      --brand-a: #14161d;
+      --scroll-thumb: #c5cad6;
+      color-scheme: light;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    body {
+      min-height: 100vh; display: flex; flex-direction: column;
+      background: var(--bg); color: var(--text);
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color .3s ease, color .3s ease;
+    }
+    a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    svg.i { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ---------- Header ---------- */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 0 clamp(14px, 3vw, 32px);
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border);
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      transition: background-color .3s ease, border-color .3s ease;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; min-width: 0; text-decoration: none; }
+    .dragon-emblem { width: 40px; height: 40px; flex: none; filter: drop-shadow(0 0 6px var(--glow)); animation: floatDragon 3s ease-in-out infinite; }
+    .logo-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .brand-name {
+      font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; line-height: 1;
+      background: linear-gradient(135deg, var(--brand-a) 30%, var(--accent) 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand-name span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+    .brand-sub { font-size: .8125rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    @keyframes floatDragon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+    .right { display: flex; align-items: center; gap: clamp(6px, 1.5vw, 14px); }
+
+    .power-badge {
+      display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px;
+      border-radius: 999px; background: var(--card); border: 1px solid var(--border);
+      font-size: .875rem; font-weight: 600; white-space: nowrap;
+      transition: background-color .3s ease, border-color .3s ease;
+    }
+    .power-badge b { color: var(--accent); font-weight: 800; }
+
+    .icon-btn {
+      width: 44px; height: 44px; display: grid; place-items: center; border-radius: 999px;
+      background: var(--card); border: 1px solid var(--border); color: var(--text);
+      font-size: 1.125rem; cursor: pointer;
+      transition: border-color .2s ease, box-shadow .2s ease, background-color .3s ease;
+    }
+    .icon-btn:hover { border-color: var(--accent); box-shadow: 0 0 14px var(--glow); }
+
+    .nav { display: flex; gap: clamp(2px, 1vw, 8px); list-style: none; }
+    .nav a, .nav button {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 10px; border: 0; background: none; cursor: pointer;
+      font: 500 0.9rem 'Be Vietnam Pro', system-ui, sans-serif; color: var(--muted); text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav a:hover, .nav button:hover { color: var(--text); background: var(--accent-soft); }
+    .nav [aria-current="page"] { color: var(--accent); background: var(--accent-soft); }
+
+    /* ---------- Chung ---------- */
+    main { flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; padding: 36px clamp(16px, 4vw, 32px) 80px; }
+    h1 { font-weight: 800; font-size: clamp(1.5rem, 3.5vw, 2rem); margin-bottom: 20px; }
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: clamp(22px, 5vw, 36px); transition: background-color .3s ease, border-color .3s ease; }
+    .btn {
+      display: inline-block; padding: 10px 18px; border-radius: 12px; cursor: pointer; text-decoration: none; text-align: center;
+      font: 500 0.9rem 'Be Vietnam Pro', system-ui, sans-serif; border: 1px solid var(--border);
+      background: var(--card); color: var(--text);
+      transition: border-color 0.2s, background 0.2s, opacity 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .btn-primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); box-shadow: 0 6px 18px var(--glow); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn:disabled:hover { border-color: var(--border); box-shadow: none; }
+    .btn-primary:disabled:hover { background: var(--accent); border-color: var(--accent); }
+
+    .spk { display: inline-grid; place-items: center; flex: none; width: 34px; height: 34px; border: 0; border-radius: 8px; background: none; color: var(--accent); cursor: pointer; transition: background 0.2s, opacity 0.2s; }
+    .spk:hover:not(:disabled) { background: var(--accent-soft); }
+    .spk:disabled { opacity: 0.25; cursor: not-allowed; }
+
+    /* ---------- Khu vực Từ vựng ---------- */
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+    .toolbar .btn-primary { margin-left: auto; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 18px; background: var(--card); transition: background-color .3s ease, border-color .3s ease; }
+    table { width: 100%; border-collapse: collapse; min-width: 780px; }
+    th { padding: 14px 12px; text-align: left; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--border); }
+    td { padding: 6px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: 0; }
+    .col-idx { width: 48px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .col-chk, .col-act { width: 92px; text-align: center; }
+    th.col-chk, th.col-act { text-align: center; }
+    .cell { display: flex; align-items: center; gap: 4px; }
+    td input[type="text"] {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid transparent; background: transparent;
+      font: 400 0.95rem 'Be Vietnam Pro', system-ui, sans-serif; color: var(--text);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    td input[type="text"]::placeholder { color: var(--placeholder); }
+    td input[type="text"]:hover { border-color: var(--border); }
+    td input[type="text"]:focus { outline: none; border-color: var(--accent); background: var(--card-deep); }
+    input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+    input[type="checkbox"]:disabled { opacity: 0.3; cursor: not-allowed; }
+    .del { padding: 8px; border: 0; border-radius: 8px; background: none; color: var(--muted); cursor: pointer; transition: color 0.2s, background 0.2s; }
+    .del:hover { color: var(--bad); background: var(--bad-soft); }
+
+    /* ---------- Khu vực Luyện tập ---------- */
+    #viewPractice > section { max-width: 680px; margin: 0 auto; }
+    .gate { text-align: center; }
+    .gate p { line-height: 1.7; margin-bottom: 24px; }
+
+    .stats { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 0.9rem; color: var(--muted); margin-bottom: 10px; }
+    .stats .ok { color: var(--ok); }
+    .stats .bad { color: var(--bad); }
+    .stats b { font-weight: 600; }
+    .bar { height: 4px; border-radius: 4px; background: var(--border); overflow: hidden; margin-bottom: 22px; }
+    .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.3s ease; }
+
+    .card { text-align: center; padding: clamp(32px, 8vw, 56px) 20px; margin-bottom: 18px; }
+    .word-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .word { font-weight: 800; font-size: clamp(2rem, 7vw, 3.2rem); line-height: 1.2; overflow-wrap: anywhere; }
+
+    .options { display: grid; gap: 10px; }
+    .opt {
+      display: flex; align-items: center; gap: 14px; width: 100%;
+      padding: 14px 16px; border-radius: 14px; cursor: pointer; text-align: left;
+      font: 400 1rem 'Be Vietnam Pro', system-ui, sans-serif; color: var(--text);
+      background: var(--card); border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .opt:hover:not(:disabled) { border-color: var(--accent); box-shadow: 0 6px 18px var(--glow); }
+    .opt:disabled { cursor: default; }
+    .opt .tag { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); font-size: 0.8rem; font-weight: 600; color: var(--accent); }
+    .opt.correct { background: var(--ok-soft); border-color: var(--ok); }
+    .opt.correct .tag { background: var(--ok); border-color: var(--ok); color: #fff; }
+    .opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+    .opt.wrong .tag { background: var(--bad); border-color: var(--bad); color: #fff; }
+
+    .feedback { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 18px; }
+    .feedback p { font-weight: 500; line-height: 1.5; }
+    .feedback p.ok { color: var(--ok); }
+    .feedback p.bad { color: var(--bad); }
+    .example { display: flex; align-items: flex-start; gap: 8px; margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: var(--card); border-left: 3px solid var(--accent); line-height: 1.6; }
+    .example .label { color: var(--accent); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; display: block; }
+
+    .result { text-align: center; }
+    .result h2.title { font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 800; margin-bottom: 18px; }
+    .percent { font-weight: 900; font-size: clamp(3.4rem, 14vw, 5rem); color: var(--accent); line-height: 1; }
+    .summary { display: flex; justify-content: center; gap: 28px; margin: 18px 0 26px; }
+    .summary div { font-size: 0.85rem; color: var(--muted); }
+    .summary b { display: block; font-size: 1.5rem; font-weight: 600; }
+    .summary .ok b { color: var(--ok); }
+    .summary .bad b { color: var(--bad); }
+    .review { text-align: left; border-top: 1px solid var(--border); padding-top: 20px; margin-bottom: 26px; }
+    .review h3 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
+    .review ul { list-style: none; display: grid; gap: 8px; }
+    .review li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 14px; border-radius: 10px; background: var(--card-deep); border: 1px solid var(--border); }
+    .review li span:last-child { color: var(--muted); text-align: right; }
+    .review .none { color: var(--ok); }
+    .actions { display: grid; gap: 10px; }
+    .actions .btn { padding: 12px 22px; font-size: 0.95rem; }
+
+    .foot {
+      min-height: 56px; display: flex; align-items: center; justify-content: center; text-align: center;
+      padding: 0 16px; background: var(--card); border-top: 1px solid var(--border);
+      font-size: 0.78rem; letter-spacing: 0.14em; color: var(--muted);
+      transition: background-color .3s ease, border-color .3s ease;
+    }
+
+    @media (max-width: 767px) {
+      body { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+      .topbar { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--bg); }
+      .mainnav {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+        padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+        background: var(--card); border-top: 1px solid var(--border); border-radius: 20px 20px 0 0;
+      }
+      .nav { gap: 2px; }
+      .nav li { flex: 1; }
+      .nav a, .nav button { width: 100%; min-height: 52px; flex-direction: column; justify-content: center; gap: 2px; padding: 6px 2px; font-size: 0.6875rem; }
+      .power-badge .lbl { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .brand-sub { display: none; }
+      .foot { font-size: 0.66rem; letter-spacing: 0.08em; }
+      .toolbar .btn-primary { margin-left: 0; width: 100%; }
+      .review li { flex-direction: column; gap: 2px; }
+      .review li span:last-child { text-align: left; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="home.html" class="logo" aria-label="VOCZ Gaming English - Trang chủ">
+      <svg class="dragon-emblem" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="whiteDragon" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color: var(--dragon-a)"/>
+            <stop offset="50%" style="stop-color: var(--dragon-b)"/>
+            <stop offset="100%" style="stop-color: var(--dragon-c)"/>
+          </linearGradient>
+          <linearGradient id="glowRed" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff3b5c"/>
+            <stop offset="100%" stop-color="#e60033"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 15 L65 35 L85 25 L75 50 L95 65 L70 70 L65 90 L50 75 L35 90 L30 70 L5 65 L25 50 L15 25 L35 35 Z" fill="url(#whiteDragon)" opacity="0.15"/>
+        <path d="M50 10 C45 20 35 25 25 20 C35 35 45 40 48 55 C40 55 30 50 20 60 C35 65 45 65 50 85 C55 65 65 65 80 60 C70 50 60 55 52 55 C55 40 65 35 75 20 C65 25 55 20 50 10 Z" fill="url(#whiteDragon)"/>
+        <circle cx="43" cy="28" r="3" fill="url(#glowRed)"/>
+        <circle cx="57" cy="28" r="3" fill="url(#glowRed)"/>
+      </svg>
+      <div class="logo-text">
+        <div class="brand-name">VOC<span>Z</span></div>
+        <div class="brand-sub">Gaming English</div>
+      </div>
+    </a>
+
+    <div class="right">
+      <nav class="mainnav" aria-label="Điều hướng chính">
+        <ul class="nav">
+          <li><a href="home.html" title="Trang chủ">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Trang chủ</span></a></li>
+          <li><button type="button" id="navVocab" title="Danh sách từ vựng" aria-current="page">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span>Từ vựng</span></button></li>
+          <li><button type="button" id="navPractice" title="Luyện tập">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>Luyện tập</span></button></li>
+          <li><button type="button" id="logout" title="Đăng xuất">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg><span>Đăng xuất</span></button></li>
+        </ul>
+      </nav>
+
+      <div class="power-badge" title="Lực Chiến">
+        <span aria-hidden="true">⚡</span>
+        <span class="lbl">Lực Chiến</span>
+        <b id="combatPower">0</b>
+      </div>
+
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="Chuyển sang giao diện sáng">
+        <span id="themeIcon" aria-hidden="true">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= TỪ VỰNG ================= -->
+    <div id="viewVocab">
+      <h1>Danh sách từ vựng</h1>
+      <div class="toolbar">
+        <button type="button" class="btn" id="selectAll">Select All</button>
+        <button type="button" class="btn" id="deselectAll">Deselect All</button>
+        <button type="button" class="btn btn-primary" id="startPractice" disabled>Start Practice (0)</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-idx">#</th>
+              <th>ENGLISH WORD</th>
+              <th>MEANING</th>
+              <th>EXAMPLE</th>
+              <th class="col-chk">PRACTICE</th>
+              <th class="col-act">ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="vocabBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================= LUYỆN TẬP ================= -->
+    <div id="viewPractice" hidden>
+      <section id="gate" class="panel gate" hidden>
+        <p>Bạn cần chọn ít nhất 4 từ vựng để bắt đầu luyện tập tạo câu hỏi trắc nghiệm! Vui lòng quay lại trang Lưu Từ Vựng để tích chọn thêm.</p>
+        <button type="button" class="btn btn-primary" id="gateBack">Quay lại Lưu Từ Vựng</button>
+      </section>
+
+      <section id="quiz" hidden>
+        <div class="stats">
+          <span>Tiến trình: <b id="progress">0/0</b></span>
+          <span><span class="ok">Đúng: <b id="cntOk">0</b></span> &nbsp; <span class="bad">Sai: <b id="cntBad">0</b></span></span>
+        </div>
+        <div class="bar" id="bar" role="progressbar" aria-label="Tiến trình" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+
+        <div class="panel card">
+          <div class="word-row">
+            <div class="word" id="word"></div>
+            <span id="wordSpkSlot"></span>
+          </div>
+        </div>
+
+        <div class="options" id="options"></div>
+
+        <div id="afterAnswer" hidden>
+          <div class="feedback">
+            <p id="msg"></p>
+            <button type="button" class="btn btn-primary" id="nextBtn">Tiếp tục &gt;</button>
+          </div>
+          <div class="example" id="example" hidden>
+            <span id="exSpkSlot"></span>
+            <div><span class="label">VÍ DỤ</span><span id="exText"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="result" class="panel result" hidden>
+        <h2 class="title">Kết quả đợt luyện tập</h2>
+        <div class="percent" id="percent">0%</div>
+        <div class="summary">
+          <div class="ok"><b id="rOk">0</b>Câu đúng</div>
+          <div class="bad"><b id="rBad">0</b>Câu sai</div>
+        </div>
+        <div class="review">
+          <h3>Từ cần lưu ý</h3>
+          <ul id="wrongList"></ul>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="restartBtn">Làm Bắt Đầu Lại Đợt Này</button>
+          <button type="button" class="btn" id="retryWrongBtn">Ôn Lại Riêng Câu Sai</button>
+          <button type="button" class="btn" id="changeBtn">Thay Đổi Tùy Chọn</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot">© 2026 VOCZ GAMING ENGLISH · CHÚC BẠN HỌC TỐT</footer>
+
+  <script>
+    const STORE_KEY = "vocab_words";
+    const $ = id => document.getElementById(id);
+
+    /* ---------- Giao diện sáng/tối + Lực Chiến (dùng chung với home.html) ---------- */
+    (function () {
+      const root = document.documentElement;
+      const themeBtn = $("themeToggle");
+      const themeIcon = $("themeIcon");
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+
+      function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        const isDark = theme === "dark";
+        themeIcon.textContent = isDark ? "☀️" : "🌙";
+        themeBtn.setAttribute("aria-label", isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối");
+        if (metaTheme) metaTheme.setAttribute("content", isDark ? "#0f1117" : "#f3f4f8");
+      }
+      applyTheme(root.getAttribute("data-theme") === "light" ? "light" : "dark");
+      themeBtn.addEventListener("click", () => {
+        const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        applyTheme(next);
+        try { localStorage.setItem("vocz-theme", next); } catch (e) {}
+      });
+
+      function syncPower() {
+        let power = 0;
+        try { power = parseInt(localStorage.getItem("vocz-power"), 10); } catch (e) {}
+        if (isNaN(power) || power < 0) power = 0;
+        $("combatPower").textContent = power.toLocaleString("vi-VN");
+      }
+      syncPower();
+      window.addEventListener("storage", syncPower);
+      window.addEventListener("pageshow", syncPower);
+    })();
+
+    /* ---------- Phát âm (Web Speech API) ---------- */
+    const canSpeak = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+    function speak(text) {
+      if (!canSpeak || !text || !text.trim()) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text.trim());
+      u.lang = "en-US";
+      u.rate = 0.9;
+      speechSynthesis.speak(u);
+    }
+    const SPEAKER_SVG = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+    function speakerBtn(getText) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "spk";
+      b.title = "Nghe phát âm";
+      b.setAttribute("aria-label", "Nghe phát âm");
+      b.innerHTML = SPEAKER_SVG;
+      b.hidden = !canSpeak;
+      b.addEventListener("click", () => speak(getText()));
+      return b;
+    }
+
+    /* ---------- Chuyển khu vực ---------- */
+    function showView(v) {
+      if (canSpeak) speechSynthesis.cancel();
+      $("viewVocab").hidden = v !== "vocab";
+      $("viewPractice").hidden = v !== "practice";
+      const set = (el, on) => on ? el.setAttribute("aria-current", "page") : el.removeAttribute("aria-current");
+      set($("navVocab"), v === "vocab");
+      set($("navPractice"), v === "practice");
+      window.scrollTo(0, 0);
+    }
+    const showScreen = name => ["gate", "quiz", "result"].forEach(id => { $(id).hidden = id !== name; });
+
+    /* =====================================================
+       KHU VỰC TỪ VỰNG
+    ===================================================== */
+    const body = $("vocabBody");
+    const startBtn = $("startPractice");
+    let nextId = 1;
+    let rows = []; // { id, word, meaning, example, checked }
+
+    const isEmpty = r => !r.word.trim() && !r.meaning.trim() && !r.example.trim();
+    const isComplete = r => !!(r.word.trim() && r.meaning.trim());
+    const newRow = (word = "", meaning = "", example = "") => ({ id: nextId++, word, meaning, example, checked: false });
+
+    function save() {
+      try {
+        const data = rows.filter(r => !isEmpty(r)).map(r => ({ word: r.word, meaning: r.meaning, example: r.example }));
+        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      } catch (e) { console.error("Không thể lưu dữ liệu:", e); }
+    }
+
+    function load() {
+      try {
+        const data = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
+        if (Array.isArray(data)) rows = data.map(d => newRow(String(d.word || ""), String(d.meaning || ""), String(d.example || "")));
+      } catch (e) { rows = []; }
+      rows.push(newRow());
+    }
+
+    function updateCount() {
+      const n = rows.filter(r => r.checked && isComplete(r)).length;
+      startBtn.textContent = "Start Practice (" + n + ")";
+      startBtn.disabled = n === 0;
+    }
+
+    function buildRow(r) {
+      const tr = document.createElement("tr");
+      const idx = document.createElement("td");
+      idx.className = "col-idx";
+
+      const chkTd = document.createElement("td");
+      chkTd.className = "col-chk";
+      const chk = document.createElement("input");
+      chk.type = "checkbox";
+      chk.checked = r.checked;
+      chk.disabled = !isComplete(r);
+      chk.setAttribute("aria-label", "Chọn để luyện tập");
+      chk.addEventListener("change", () => { r.checked = chk.checked; updateCount(); });
+      chkTd.appendChild(chk);
+
+      const spk = speakerBtn(() => r.word);
+      spk.disabled = !r.word.trim();
+
+      const mkInput = (field, placeholder, label, extra) => {
+        const td = document.createElement("td");
+        const wrap = document.createElement("div");
+        wrap.className = "cell";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = r[field];
+        input.placeholder = placeholder;
+        input.setAttribute("aria-label", label);
+        input.autocomplete = "off";
+        input.addEventListener("input", () => {
+          r[field] = input.value;
+          spk.disabled = !r.word.trim();
+          chk.disabled = !isComplete(r);
+          if (chk.disabled) { r.checked = false; chk.checked = false; }
+          // Gõ vào hàng trống cuối cùng -> tự thêm hàng trống mới bên dưới
+          if (r === rows[rows.length - 1] && !isEmpty(r)) {
+            const fresh = newRow();
+            rows.push(fresh);
+            body.appendChild(buildRow(fresh));
+            renumber();
+          }
+          save();
+          updateCount();
+        });
+        wrap.appendChild(input);
+        if (extra) wrap.appendChild(extra);
+        td.appendChild(wrap);
+        return td;
+      };
+
+      const actTd = document.createElement("td");
+      actTd.className = "col-act";
+      const del = document.createElement("button");
+      del.type = "button";
+      del.className = "del";
+      del.title = "Xóa";
+      del.setAttribute("aria-label", "Xóa từ vựng");
+      del.innerHTML = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>';
+      del.addEventListener("click", () => {
+        rows = rows.filter(x => x !== r);
+        if (!rows.length || !isEmpty(rows[rows.length - 1])) rows.push(newRow());
+        save();
+        render();
+      });
+      actTd.appendChild(del);
+
+      tr.append(
+        idx,
+        mkInput("word", "e.g. Apple", "English word", spk),
+        mkInput("meaning", "e.g. Quả táo", "Meaning"),
+        mkInput("example", "e.g. I eat an apple every day.", "Example"),
+        chkTd,
+        actTd
+      );
+      return tr;
+    }
+
+    function renumber() {
+      body.querySelectorAll("tr").forEach((tr, i) => { tr.firstElementChild.textContent = i + 1; });
+    }
+    function render() {
+      body.replaceChildren(...rows.map(buildRow));
+      renumber();
+      updateCount();
+    }
+
+    $("selectAll").addEventListener("click", () => { rows.forEach(r => { r.checked = isComplete(r); }); render(); });
+    $("deselectAll").addEventListener("click", () => { rows.forEach(r => { r.checked = false; }); render(); });
+
+    /* =====================================================
+       KHU VỰC LUYỆN TẬP (dữ liệu chỉ nằm trong bộ nhớ trang)
+    ===================================================== */
+    let pool = [];
+    let quiz = [], idx = 0, okCount = 0, wrongWords = [], answered = false, currentOptions = [];
+
+    const shuffle = arr => {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
+
+    let currentItem = null;
+    $("wordSpkSlot").appendChild(speakerBtn(() => currentItem && currentItem.word));
+    $("exSpkSlot").appendChild(speakerBtn(() => currentItem && currentItem.example));
+
+    startBtn.addEventListener("click", () => {
+      pool = rows.filter(r => r.checked && isComplete(r))
+        .map(r => ({ word: r.word.trim(), meaning: r.meaning.trim(), example: r.example.trim() }));
+      showView("practice");
+      if (pool.length < 4) { quiz = []; showScreen("gate"); }
+      else startQuiz(pool);
+    });
+
+    $("navVocab").addEventListener("click", () => showView("vocab"));
+    $("navPractice").addEventListener("click", () => { if (!quiz.length) showScreen("gate"); showView("practice"); });
+    $("gateBack").addEventListener("click", () => showView("vocab"));
+    $("changeBtn").addEventListener("click", () => showView("vocab"));
+    $("logout").addEventListener("click", () => { window.location.href = "index.html"; });
+
+    function startQuiz(words) {
+      quiz = shuffle(words);
+      idx = 0; okCount = 0; wrongWords = [];
+      showScreen("quiz");
+      renderQuestion();
+    }
+
+    function buildOptions(item) {
+      const seen = new Set([item.meaning.toLowerCase()]);
+      const distractors = [];
+      for (const w of shuffle(pool)) {
+        const key = w.meaning.toLowerCase();
+        if (!seen.has(key)) { seen.add(key); distractors.push(w.meaning); }
+        if (distractors.length === 3) break;
+      }
+      return shuffle([item.meaning, ...distractors]);
+    }
+
+    function updateStats() {
+      const done = Math.min(idx + (answered ? 1 : 0), quiz.length);
+      const pct = quiz.length ? (done / quiz.length) * 100 : 0;
+      $("progress").textContent = done + "/" + quiz.length;
+      $("cntOk").textContent = okCount;
+      $("cntBad").textContent = wrongWords.length;
+      $("barFill").style.width = pct + "%";
+      $("bar").setAttribute("aria-valuenow", Math.round(pct));
+    }
+
+    function renderQuestion() {
+      currentItem = quiz[idx];
+      answered = false;
+      $("word").textContent = currentItem.word;
+      $("afterAnswer").hidden = true;
+
+      currentOptions = buildOptions(currentItem);
+      const box = $("options");
+      box.replaceChildren();
+      currentOptions.forEach((text, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "opt";
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = "ABCD"[i];
+        const label = document.createElement("span");
+        label.textContent = text;
+        b.append(tag, label);
+        b.addEventListener("click", () => choose(i));
+        box.appendChild(b);
+      });
+      updateStats();
+    }
+
+    function choose(i) {
+      if (answered) return;
+      answered = true;
+      const item = quiz[idx];
+      const buttons = Array.from($("options").children);
+      const correctIdx = currentOptions.indexOf(item.meaning);
+      const msg = $("msg");
+
+      buttons.forEach(b => { b.disabled = true; });
+      buttons[correctIdx].classList.add("correct");
+
+      if (i === correctIdx) {
+        okCount++;
+        msg.className = "ok";
+        msg.textContent = "Chính xác! Bạn đã nhớ rất tốt từ vựng này!";
+      } else {
+        buttons[i].classList.add("wrong");
+        wrongWords.push(item);
+        msg.className = "bad";
+        msg.textContent = "Chưa chính xác! Nghĩa đúng: " + item.meaning;
+      }
+
+      $("example").hidden = !item.example;
+      $("exText").textContent = item.example;
+
+      $("nextBtn").textContent = idx === quiz.length - 1 ? "Xem kết quả" : "Tiếp tục >";
+      $("afterAnswer").hidden = false;
+      $("nextBtn").focus();
+      updateStats();
+    }
+
+    function next() {
+      if (!answered) return;
+      if (canSpeak) speechSynthesis.cancel();
+      if (idx === quiz.length - 1) return showResult();
+      idx++;
+      renderQuestion();
+    }
+
+    function showResult() {
+      $("percent").textContent = Math.round((okCount / quiz.length) * 100) + "%";
+      $("rOk").textContent = okCount;
+      $("rBad").textContent = wrongWords.length;
+
+      const list = $("wrongList");
+      list.replaceChildren();
+      if (!wrongWords.length) {
+        const li = document.createElement("li");
+        li.className = "none";
+        li.textContent = "Tuyệt vời! Bạn không sai từ nào trong đợt này.";
+        list.appendChild(li);
+      } else {
+        wrongWords.forEach(w => {
+          const li = document.createElement("li");
+          const a = document.createElement("span");
+          const b = document.createElement("span");
+          a.textContent = w.word;
+          b.textContent = w.meaning;
+          li.append(a, b);
+          list.appendChild(li);
+        });
+      }
+      $("retryWrongBtn").hidden = wrongWords.length === 0;
+      showScreen("result");
+      window.scrollTo(0, 0);
+    }
+
+    $("nextBtn").addEventListener("click", next);
+    $("restartBtn").addEventListener("click", () => startQuiz(pool));
+    $("retryWrongBtn").addEventListener("click", () => startQuiz(wrongWords.slice()));
+
+    document.addEventListener("keydown", e => {
+      if ($("viewPractice").hidden || $("quiz").hidden || answered) return;
+      const k = e.key.toLowerCase();
+      const i = "abcd".indexOf(k) >= 0 ? "abcd".indexOf(k) : "1234".indexOf(k);
+      if (k.length === 1 && i >= 0 && i < currentOptions.length) choose(i);
+    });
+
+    /* ---------- Khởi động ---------- */
+    load();
+    render();
+  </script>
+</body>
+</html>
