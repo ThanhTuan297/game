@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hồ Sơ - VOCZ Gaming English</title>
+  <meta name="theme-color" content="#0f1117">
+
+  <script>
+    try {
+      var savedTheme = localStorage.getItem('vocz-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    } catch (e) {}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root,
+    :root[data-theme="dark"] {
+      --bg: #0f1117;
+      --card: #1a1d26;
+      --card-deep: #141720;
+      --border: #2a2f3d;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #ff3b5c;
+      --accent-deep: #e60033;
+      --accent-soft: rgba(255, 59, 92, 0.12);
+      --glow: rgba(255, 59, 92, 0.28);
+      --shadow: rgba(0, 0, 0, 0.4);
+      --header-bg: rgba(15, 17, 23, 0.82);
+      --dragon-a: #ffffff;
+      --dragon-b: #e2e8f0;
+      --dragon-c: #94a3b8;
+      --brand-a: #f1f5f9;
+      --scroll-thumb: #2a2f3d;
+      color-scheme: dark;
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --card-deep: #f1f5f9;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #dc2626;
+      --accent-deep: #b91c1c;
+      --accent-soft: rgba(220, 38, 38, 0.09);
+      --glow: rgba(220, 38, 38, 0.2);
+      --shadow: rgba(15, 23, 42, 0.1);
+      --header-bg: rgba(248, 250, 252, 0.86);
+      --dragon-a: #1f2433;
+      --dragon-b: #3a4260;
+      --dragon-c: #6b7694;
+      --brand-a: #0f172a;
+      --scroll-thumb: #cbd5e1;
+      color-scheme: light;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color .3s ease, color .3s ease;
+    }
+
+    a:focus-visible, button:focus-visible, input:focus-visible, label:focus-within {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    [hidden] { display: none !important; }
+
+    /* ---------- Header ---------- */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 0 clamp(14px, 3vw, 32px);
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border);
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      transition: background-color .3s ease, border-color .3s ease;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; min-width: 0; text-decoration: none; }
+    .dragon-emblem { width: 40px; height: 40px; flex: none; filter: drop-shadow(0 0 6px var(--glow)); animation: floatDragon 3s ease-in-out infinite; }
+    .logo-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .brand-name {
+      font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; line-height: 1;
+      background: linear-gradient(135deg, var(--brand-a) 30%, var(--accent) 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand-name span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+    .brand-sub { font-size: .8125rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    @keyframes floatDragon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+    .right { display: flex; align-items: center; gap: clamp(6px, 1.5vw, 12px); }
+    .icon-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-width: 44px; height: 44px; padding: 0; border-radius: 999px;
+      background: var(--card); border: 1px solid var(--border); color: var(--text);
+      font: 600 .875rem 'Be Vietnam Pro', system-ui, sans-serif; text-decoration: none; cursor: pointer;
+      transition: border-color .2s ease, box-shadow .2s ease, background-color .3s ease, color .2s ease;
+    }
+    .icon-btn.has-label { padding: 0 16px; }
+    .icon-btn:hover { border-color: var(--accent); box-shadow: 0 0 14px var(--glow); }
+    .icon-btn svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ---------- Trang ---------- */
+    main { max-width: 920px; margin: 0 auto; padding: 36px clamp(14px, 4vw, 32px) 64px; }
+
+    .hero { display: grid; justify-items: center; gap: 10px; text-align: center; margin-bottom: 36px; }
+    .avatar-wrap { position: relative; width: clamp(132px, 22vw, 184px); aspect-ratio: 1; }
+    .avatar-ring {
+      width: 100%; height: 100%; padding: 5px; border-radius: 50%;
+      background: var(--card); border: 3px solid var(--accent);
+      box-shadow: 0 0 0 6px var(--accent-soft), 0 0 34px var(--glow);
+      transition: background-color .3s ease;
+    }
+    .avatar-ring img { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: cover; }
+    .edit-btn {
+      position: absolute; right: 2px; bottom: 6px; width: 44px; height: 44px;
+      display: grid; place-items: center; border-radius: 50%;
+      background: var(--accent); color: #fff; border: 3px solid var(--bg); cursor: pointer;
+      transition: background-color .2s ease, transform .2s ease;
+    }
+    .edit-btn:hover { background: var(--accent-deep); transform: scale(1.06); }
+    .edit-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .player-name { font-size: clamp(1.4rem, 4vw, 1.9rem); font-weight: 800; line-height: 1.2; overflow-wrap: anywhere; margin-top: 6px; }
+    .realm {
+      display: inline-flex; align-items: center; height: 32px; padding: 0 16px; border-radius: 999px;
+      background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent);
+      font-size: .875rem; font-weight: 700;
+    }
+    .progress { width: min(260px, 80vw); }
+    .progress .track { height: 6px; border-radius: 6px; background: var(--border); overflow: hidden; }
+    .progress .fill { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 6px; transition: width .6s ease; }
+    .progress p { margin-top: 8px; font-size: .8125rem; color: var(--muted); line-height: 1.4; }
+
+    /* ---------- Lưới lực chiến ---------- */
+    .board { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+    .stat {
+      position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+      min-height: 140px; padding: 18px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      transition: border-color .25s ease, box-shadow .25s ease, background-color .3s ease;
+    }
+    .stat::before, .stat::after {
+      content: ""; position: absolute; width: 16px; height: 16px; pointer-events: none;
+      border: 2px solid var(--accent); opacity: .85;
+    }
+    .stat::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; border-top-left-radius: 8px; }
+    .stat::after { right: 10px; bottom: 10px; border-left: 0; border-top: 0; border-bottom-right-radius: 8px; }
+    .stat:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 10px 30px var(--glow); }
+
+    .stat-head { display: flex; align-items: center; gap: 12px; padding-left: 8px; }
+    .stat-ico {
+      width: 42px; height: 42px; flex: none; display: grid; place-items: center;
+      border-radius: 12px; background: var(--accent-soft); font-size: 1.35rem; line-height: 1;
+    }
+    .stat-label { font-size: .9375rem; font-weight: 700; line-height: 1.2; }
+    .stat-sub { font-size: .75rem; color: var(--muted); margin-top: 2px; }
+    .stat-num { font-size: clamp(1.85rem, 5vw, 2.4rem); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; padding-left: 8px; }
+
+    .stat.total {
+      min-height: 160px;
+      background: linear-gradient(135deg, var(--card) 40%, var(--accent-soft));
+      border-color: var(--accent);
+      box-shadow: 0 0 28px var(--glow);
+    }
+    .stat.total .stat-ico { background: var(--accent); }
+    .stat.total .stat-label { font-size: 1rem; letter-spacing: .06em; }
+    .stat.total .stat-num { font-size: clamp(2.6rem, 9vw, 3.8rem); color: var(--accent); }
+
+    .s-vocab, .total { grid-column: 1 / -1; }
+
+    @media (min-width: 768px) {
+      .board { grid-template-columns: repeat(3, 1fr); gap: 20px 28px; }
+      .s-lis   { grid-column: 1; grid-row: 1; }
+      .s-write { grid-column: 1; grid-row: 2; }
+      .s-vocab { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+      .s-read  { grid-column: 3; grid-row: 1; }
+      .s-speak { grid-column: 3; grid-row: 2; }
+      .total   { grid-column: 1 / -1; grid-row: 3; justify-self: center; width: min(100%, 560px); margin-top: 8px; }
+    }
+
+    @media (max-width: 359px) {
+      .board { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Hộp thoại hồ sơ ---------- */
+    dialog {
+      width: min(92vw, 420px); margin: auto; padding: 24px;
+      background: var(--card); color: var(--text);
+      border: 1px solid var(--border); border-radius: 24px;
+      box-shadow: 0 24px 60px var(--shadow);
+    }
+    dialog::backdrop { background: rgba(0, 0, 0, .6); }
+    dialog h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 18px; }
+    .field-label { display: block; font-size: .8125rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; }
+    .text-input {
+      width: 100%; height: 46px; padding: 0 14px; margin-bottom: 20px;
+      background: var(--card-deep); color: var(--text);
+      border: 1px solid var(--border); border-radius: 12px;
+      font: 500 .95rem 'Be Vietnam Pro', system-ui, sans-serif;
+      transition: border-color .2s ease;
+    }
+    .text-input:focus { outline: none; border-color: var(--accent); }
+    .avatar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
+    .avatar-opt {
+      aspect-ratio: 1; min-height: 44px; padding: 3px; border-radius: 14px;
+      border: 2px solid transparent; background: var(--card-deep); cursor: pointer;
+      transition: border-color .15s ease;
+    }
+    .avatar-opt:hover { border-color: var(--muted); }
+    .avatar-opt[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 10px var(--glow); }
+    .avatar-opt img { width: 100%; height: 100%; display: block; border-radius: 10px; }
+    .upload {
+      display: flex; align-items: center; justify-content: center; gap: 8px; height: 46px;
+      border: 1px dashed var(--border); border-radius: 12px; color: var(--text);
+      font-size: .9rem; font-weight: 600; cursor: pointer;
+      transition: border-color .2s ease, color .2s ease;
+    }
+    .upload:hover { border-color: var(--accent); color: var(--accent); }
+    .upload input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    .upload:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .note { min-height: 1.2em; margin-top: 10px; font-size: .8125rem; color: var(--accent); }
+    .done {
+      width: 100%; height: 46px; margin-top: 12px; border: 0; border-radius: 12px; cursor: pointer;
+      background: var(--accent); color: #fff; font: 700 .95rem 'Be Vietnam Pro', system-ui, sans-serif;
+      transition: background-color .2s ease;
+    }
+    .done:hover { background: var(--accent-deep); }
+
+    @media (max-width: 639px) {
+      .brand-sub { display: none; }
+      .icon-btn.has-label { padding: 0; width: 44px; }
+      .icon-btn .txt { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="home.html" class="logo" aria-label="VOCZ Gaming English - Trang chủ">
+      <svg class="dragon-emblem" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="whiteDragon" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color: var(--dragon-a)"/>
+            <stop offset="50%" style="stop-color: var(--dragon-b)"/>
+            <stop offset="100%" style="stop-color: var(--dragon-c)"/>
+          </linearGradient>
+          <linearGradient id="glowRed" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff3b5c"/>
+            <stop offset="100%" stop-color="#e60033"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 15 L65 35 L85 25 L75 50 L95 65 L70 70 L65 90 L50 75 L35 90 L30 70 L5 65 L25 50 L15 25 L35 35 Z" fill="url(#whiteDragon)" opacity="0.15"/>
+        <path d="M50 10 C45 20 35 25 25 20 C35 35 45 40 48 55 C40 55 30 50 20 60 C35 65 45 65 50 85 C55 65 65 65 80 60 C70 50 60 55 52 55 C55 40 65 35 75 20 C65 25 55 20 50 10 Z" fill="url(#whiteDragon)"/>
+        <circle cx="43" cy="28" r="3" fill="url(#glowRed)"/>
+        <circle cx="57" cy="28" r="3" fill="url(#glowRed)"/>
+      </svg>
+      <div class="logo-text">
+        <div class="brand-name">VOC<span>Z</span></div>
+        <div class="brand-sub">Gaming English</div>
+      </div>
+    </a>
+
+    <div class="right">
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="Chuyển sang giao diện sáng">
+        <span id="themeIcon" aria-hidden="true">☀️</span>
+      </button>
+      <a href="home.html" class="icon-btn has-label" title="Trang chủ">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        <span class="txt">Trang chủ</span>
+      </a>
+      <button id="logout" class="icon-btn has-label" type="button" title="Đăng xuất">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+        <span class="txt">Đăng xuất</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-label="Hồ sơ người chơi">
+      <div class="avatar-wrap">
+        <div class="avatar-ring">
+          <img id="avatarImg" src="https://api.dicebear.com/9.x/bottts/svg?seed=VOCZ1" alt="Avatar của bạn" width="160" height="160">
+        </div>
+        <button id="editBtn" class="edit-btn" type="button" aria-label="Chỉnh sửa hồ sơ" aria-haspopup="dialog">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        </button>
+      </div>
+      <h1 class="player-name" id="playerName">Người chơi VOCZ</h1>
+      <span class="realm" id="realm">Phàm Nhân</span>
+      <div class="progress">
+        <div class="track" role="progressbar" aria-label="Tiến độ đột phá" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="realmTrack"><i class="fill" id="realmFill"></i></div>
+        <p id="realmNote"></p>
+      </div>
+    </section>
+
+    <section class="board" aria-label="Bảng lực chiến">
+      <article class="stat s-lis">
+        <div class="stat-head"><div class="stat-ico" aria-hidden="true">🎧</div><div><div class="stat-label">Listening CP</div><div class="stat-sub">Luyện Nghe</div></div></div>
+        <div class="stat-num" id="cpLis">0</div>
+      </article>
+
+      <article class="stat s-read">
+        <div class="stat-head"><div class="stat-ico" aria-hidden="true">📖</div><div><div class="stat-label">Reading CP</div><div class="stat-sub">Luyện Đọc</div></div></div>
+        <div class="stat-num" id="cpRead">0</div>
+      </article>
+
+      <article class="stat s-write">
+        <div class="stat-head"><div class="stat-ico" aria-hidden="true">✍️</div><div><div class="stat-label">Writing CP</div><div class="stat-sub">Luyện Viết</div></div></div>
+        <div class="stat-num" id="cpWrite">0</div>
+      </article>
+
+      <article class="stat s-speak">
+        <div class="stat-head"><div class="stat-ico" aria-hidden="true">🗣️</div><div><div class="stat-label">Speaking CP</div><div class="stat-sub">Luyện Nói</div></div></div>
+        <div class="stat-num" id="cpSpeak">0</div>
+      </article>
+
+      <article class="stat s-vocab">
+        <div class="stat-head"><div class="stat-ico" aria-hidden="true">📚</div><div><div class="stat-label">Vocab CP</div><div class="stat-sub">Hồ sơ từ vựng</div></div></div>
+        <div class="stat-num" id="cpVocab">0</div>
+      </article>
+
+      <article class="stat total">
+        <div class="stat-head"><div class="stat-ico" aria-hidden="true">⚡</div><div><div class="stat-label">TỔNG LỰC CHIẾN</div><div class="stat-sub">Total Combat Power</div></div></div>
+        <div class="stat-num" id="cpTotal">0</div>
+      </article>
+    </section>
+  </main>
+
+  <dialog id="profileDialog" aria-labelledby="dialogTitle">
+    <h2 id="dialogTitle">Chỉnh sửa hồ sơ</h2>
+
+    <label class="field-label" for="nameInput">Tên tài khoản</label>
+    <input class="text-input" id="nameInput" type="text" maxlength="24" autocomplete="off" placeholder="Người chơi VOCZ">
+
+    <span class="field-label">Chọn avatar</span>
+    <div class="avatar-grid" id="avatarGrid"></div>
+
+    <label class="upload">
+      <input type="file" id="avatarFile" accept="image/*">
+      <span aria-hidden="true">🖼️</span><span>Tải ảnh từ máy lên</span>
+    </label>
+    <p class="note" id="avatarNote" role="status"></p>
+
+    <button type="button" class="done" id="closeDialog">Xong</button>
+  </dialog>
+
+  <script>
+    (function () {
+      var $ = function (id) { return document.getElementById(id); };
+      var root = document.documentElement;
+
+      var KEY = { theme: 'vocz-theme', avatar: 'vocz-avatar', name: 'vocz-name', power: 'vocz-power' };
+      var CP = {
+        lis: ['vocz_lis_daily_cp', 'vocz_lis_best_cp'],
+        read: ['vocz_read_daily_cp', 'vocz_read_best_cp'],
+        write: ['vocz_write_daily_cp', 'vocz_write_best_cp'],
+        speak: ['vocz_speak_daily_cp', 'vocz_speak_best_cp'],
+        vocab: ['vocz_vocab_cp'],
+        pvp: ['vocz_pvp_best_cp']
+      };
+      function readSum(keys) {
+        return keys.reduce(function (sum, k) { return sum + readCP(k); }, 0);
+      }
+      var SEEDS = ['VOCZ1', 'VOCZ2', 'VOCZ3', 'VOCZ4', 'VOCZ5'];
+      var DEFAULT_NAME = 'Người chơi VOCZ';
+      var REALMS = [
+        { min: 0, name: 'Phàm Nhân' },
+        { min: 100, name: 'Luyện Khí Kỳ' },
+        { min: 500, name: 'Trúc Cơ Kỳ' },
+        { min: 1500, name: 'Kim Đan Kỳ' },
+        { min: 4000, name: 'Nguyên Anh Kỳ' },
+        { min: 10000, name: 'Hóa Thần Kỳ' }
+      ];
+      var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function read(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+      function write(key, value) { try { localStorage.setItem(key, value); return true; } catch (e) { return false; } }
+      function readCP(key) {
+        var n = parseInt(read(key), 10);
+        return isNaN(n) || n < 0 ? 0 : n;
+      }
+      function fmt(n) { return n.toLocaleString('vi-VN'); }
+
+      /* ---------- Giao diện sáng/tối ---------- */
+      var themeBtn = $('themeToggle');
+      var themeIcon = $('themeIcon');
+      var metaTheme = document.querySelector('meta[name="theme-color"]');
+      function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        var isDark = theme === 'dark';
+        themeIcon.textContent = isDark ? '☀️' : '🌙';
+        themeBtn.setAttribute('aria-label', isDark ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối');
+        if (metaTheme) metaTheme.setAttribute('content', isDark ? '#0f1117' : '#f8fafc');
+      }
+      applyTheme(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+      themeBtn.addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        write(KEY.theme, next);
+      });
+
+      $('logout').addEventListener('click', function () { window.location.href = 'index.html'; });
+
+      /* ---------- Lực chiến ---------- */
+      var animated = false;
+
+      function countTo(el, target) {
+        if (reduceMotion || target === 0) { el.textContent = fmt(target); return; }
+        var start = null, dur = 700;
+        function step(ts) {
+          if (start === null) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          el.textContent = fmt(Math.round(target * (1 - Math.pow(1 - p, 3))));
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      function renderRealm(total) {
+        var i = 0;
+        for (var k = 0; k < REALMS.length; k++) { if (total >= REALMS[k].min) i = k; }
+        var cur = REALMS[i], next = REALMS[i + 1];
+        $('realm').textContent = cur.name;
+        var pct = 100, note = 'Bạn đã đạt cảnh giới cao nhất.';
+        if (next) {
+          pct = Math.round(((total - cur.min) / (next.min - cur.min)) * 100);
+          note = 'Còn ' + fmt(next.min - total) + ' lực chiến để đột phá ' + next.name + '.';
+        }
+        $('realmFill').style.width = pct + '%';
+        $('realmTrack').setAttribute('aria-valuenow', pct);
+        $('realmNote').textContent = note;
+      }
+
+      function renderStats() {
+        var v = {
+          Lis: readSum(CP.lis), Read: readSum(CP.read), Write: readSum(CP.write),
+          Speak: readSum(CP.speak), Vocab: readSum(CP.vocab)
+        };
+        var total = v.Lis + v.Read + v.Write + v.Speak + v.Vocab + readSum(CP.pvp);
+
+        ['Lis', 'Read', 'Write', 'Speak', 'Vocab'].forEach(function (k) {
+          var el = $('cp' + k);
+          if (animated) el.textContent = fmt(v[k]); else countTo(el, v[k]);
+        });
+        if (animated) $('cpTotal').textContent = fmt(total); else countTo($('cpTotal'), total);
+        animated = true;
+
+        write(KEY.power, String(total));
+        renderRealm(total);
+      }
+
+      /* ---------- Hồ sơ: tên + avatar ---------- */
+      var avatarImg = $('avatarImg');
+      var dialog = $('profileDialog');
+      var grid = $('avatarGrid');
+      var note = $('avatarNote');
+
+      function avatarSrc(value) {
+        if (/^(https?:|data:|\/|\.)/.test(value)) return value;
+        return 'https://api.dicebear.com/9.x/bottts/svg?seed=' + encodeURIComponent(value);
+      }
+      function currentAvatar() { return read(KEY.avatar) || SEEDS[0]; }
+      function currentName() { return (read(KEY.name) || '').trim() || DEFAULT_NAME; }
+
+      function renderProfile() {
+        var src = avatarSrc(currentAvatar());
+        if (avatarImg.getAttribute('src') !== src) avatarImg.setAttribute('src', src);
+        $('playerName').textContent = currentName();
+      }
+
+      function renderAvatarGrid() {
+        var active = currentAvatar();
+        grid.innerHTML = '';
+        SEEDS.forEach(function (seed, i) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'avatar-opt';
+          b.setAttribute('aria-label', 'Avatar ' + (i + 1));
+          b.setAttribute('aria-pressed', seed === active ? 'true' : 'false');
+          var img = document.createElement('img');
+          img.src = avatarSrc(seed);
+          img.alt = '';
+          img.width = 56;
+          img.height = 56;
+          b.appendChild(img);
+          b.addEventListener('click', function () {
+            note.textContent = '';
+            write(KEY.avatar, seed);
+            renderProfile();
+            renderAvatarGrid();
+          });
+          grid.appendChild(b);
+        });
+      }
+
+      $('editBtn').addEventListener('click', function () {
+        $('nameInput').value = (read(KEY.name) || '').trim();
+        note.textContent = '';
+        renderAvatarGrid();
+        dialog.showModal();
+      });
+      $('closeDialog').addEventListener('click', function () { dialog.close(); });
+      dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
+
+      $('nameInput').addEventListener('input', function (e) {
+        write(KEY.name, e.target.value.trim());
+        $('playerName').textContent = currentName();
+      });
+
+      $('avatarFile').addEventListener('change', function (e) {
+        var file = e.target.files && e.target.files[0];
+        e.target.value = '';
+        if (!file) return;
+        if (!/^image\//.test(file.type)) { note.textContent = 'Vui lòng chọn một tệp ảnh.'; return; }
+
+        var reader = new FileReader();
+        reader.onerror = function () { note.textContent = 'Không đọc được ảnh, hãy thử ảnh khác.'; };
+        reader.onload = function () {
+          var img = new Image();
+          img.onerror = function () { note.textContent = 'Ảnh không hợp lệ, hãy thử ảnh khác.'; };
+          img.onload = function () {
+            var size = 256;
+            var canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            var ctx = canvas.getContext('2d');
+            var side = Math.min(img.width, img.height);
+            ctx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, size, size);
+            var data = canvas.toDataURL('image/jpeg', 0.85);
+            if (write(KEY.avatar, data)) {
+              note.textContent = '';
+              renderProfile();
+              renderAvatarGrid();
+            } else {
+              note.textContent = 'Không lưu được ảnh, bộ nhớ trình duyệt đã đầy.';
+            }
+          };
+          img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      /* ---------- Khởi động ---------- */
+      renderProfile();
+      renderStats();
+
+      window.addEventListener('storage', function () { renderProfile(); renderStats(); });
+      window.addEventListener('pageshow', function (e) { if (e.persisted) { renderProfile(); renderStats(); } });
+    })();
+  </script>
+</body>
+</html>
