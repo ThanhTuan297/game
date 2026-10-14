@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>VOCZ Gaming English</title>
+    <meta name="theme-color" content="#0f1117">
+
+    <script>
+        try {
+            var savedTheme = localStorage.getItem('vocz-theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        } catch (e) {}
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root,
+        :root[data-theme="dark"] {
+            --bg: #0f1117;
+            --card: #1a1d26;
+            --card-deep: #141720;
+            --border: #2a2f3d;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --accent: #ff3b5c;
+            --accent-deep: #e60033;
+            --glow: rgba(255, 59, 92, 0.22);
+            --shadow: rgba(0, 0, 0, 0.4);
+            --header-bg: rgba(15, 17, 23, 0.82);
+            --dragon-a: #ffffff;
+            --dragon-b: #e2e8f0;
+            --dragon-c: #94a3b8;
+            --brand-a: #f1f5f9;
+            --scroll-thumb: #2a2f3d;
+            color-scheme: dark;
+        }
+
+        :root[data-theme="light"] {
+            --bg: #f3f4f8;
+            --card: #ffffff;
+            --card-deep: #eef0f5;
+            --border: #dfe2ea;
+            --text: #14161d;
+            --muted: #566074;
+            --accent: #e0203f;
+            --accent-deep: #c4002b;
+            --glow: rgba(224, 32, 63, 0.16);
+            --shadow: rgba(20, 22, 29, 0.1);
+            --header-bg: rgba(243, 244, 248, 0.86);
+            --dragon-a: #1f2433;
+            --dragon-b: #3a4260;
+            --dragon-c: #6b7694;
+            --brand-a: #14161d;
+            --scroll-thumb: #c5cad6;
+            color-scheme: light;
+        }
+
+        * { -webkit-tap-highlight-color: transparent; }
+
+        html { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            transition: background-color .3s ease, color .3s ease;
+        }
+
+        .themed {
+            transition: background-color .3s ease, border-color .3s ease, color .3s ease, box-shadow .3s ease;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .topbar {
+            position: fixed;
+            inset: 0 0 auto 0;
+            height: 64px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 0 16px;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            text-decoration: none;
+        }
+
+        .dragon-emblem {
+            width: 40px;
+            height: 40px;
+            flex: none;
+            filter: drop-shadow(0 0 6px var(--glow));
+            animation: floatDragon 3s ease-in-out infinite;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--brand-a) 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-name span {
+            color: var(--accent);
+            -webkit-text-fill-color: var(--accent);
+        }
+
+        .brand-sub {
+            font-size: .8125rem;
+            font-weight: 600;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        @keyframes floatDragon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .power-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 40px;
+            padding: 0 14px;
+            border-radius: 999px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            font-size: .875rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .power-badge b { color: var(--accent); font-weight: 800; }
+
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: border-color .2s ease, box-shadow .2s ease, background-color .3s ease;
+        }
+
+        .icon-btn:hover { border-color: var(--accent); box-shadow: 0 0 14px var(--glow); }
+
+        .avatar-btn {
+            display: block;
+            width: 44px;
+            height: 44px;
+            padding: 2px;
+            border-radius: 999px;
+            border: 2px solid var(--accent);
+            background: var(--card);
+            overflow: hidden;
+            transition: box-shadow .2s ease;
+        }
+
+        .avatar-btn:hover { box-shadow: 0 0 14px var(--glow); }
+        .avatar-btn img { width: 100%; height: 100%; border-radius: 999px; display: block; }
+
+        .side {
+            position: fixed;
+            z-index: 40;
+            display: flex;
+            background: var(--card);
+            border: 1px solid var(--border);
+            transition: width .28s cubic-bezier(.2, .8, .2, 1), background-color .3s ease, border-color .3s ease;
+        }
+
+        .side a {
+            display: flex;
+            align-items: center;
+            color: var(--text);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background-color .2s ease, color .2s ease;
+        }
+
+        .side a:hover { background: var(--card-deep); color: var(--accent); }
+        .side .ico { flex: none; text-align: center; line-height: 1; }
+        .side .lbl { font-weight: 600; }
+
+        @media (min-width: 768px) {
+            .side {
+                left: 0;
+                top: 64px;
+                bottom: 0;
+                width: 64px;
+                flex-direction: column;
+                gap: 6px;
+                padding: 14px 8px;
+                overflow: hidden;
+                border-width: 0 1px 0 0;
+            }
+
+            .side:hover,
+            .side:focus-within {
+                width: 216px;
+                box-shadow: 10px 0 30px var(--shadow);
+            }
+
+            .side a {
+                gap: 16px;
+                height: 48px;
+                padding: 0 12px;
+                border-radius: 14px;
+            }
+
+            .side .ico { width: 24px; font-size: 1.25rem; }
+            .side .lbl { font-size: .9375rem; opacity: 0; transition: opacity .2s ease; }
+            .side:hover .lbl,
+            .side:focus-within .lbl { opacity: 1; }
+        }
+
+        @media (max-width: 767px) {
+            .side {
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                gap: 2px;
+                padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+                border-radius: 20px 20px 0 0;
+                border-width: 1px 0 0 0;
+            }
+
+            .side a {
+                flex: 1;
+                flex-direction: column;
+                justify-content: center;
+                gap: 2px;
+                min-height: 52px;
+                padding: 6px 2px;
+                border-radius: 14px;
+            }
+
+            .side .ico { font-size: 1.25rem; }
+            .side .lbl { font-size: .6875rem; }
+        }
+
+        .main { padding: 80px 16px 96px; }
+
+        .dash {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 1fr;
+        }
+
+        .stack {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .main { padding: 88px 24px 24px 88px; }
+            .dash { grid-template-columns: 1fr 1fr; }
+            .stack { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (min-width: 1024px) {
+            .main {
+                min-height: 100dvh;
+                display: flex;
+                align-items: center;
+                padding: 72px 24px 24px calc(64px + 6vw);
+            }
+
+            .dash {
+                grid-template-columns: minmax(200px, 17vw) minmax(200px, 16vw) minmax(280px, 27vw);
+                column-gap: clamp(32px, 7vw, 140px);
+                height: clamp(520px, 74dvh, 780px);
+            }
+
+            .stack {
+                grid-column: auto;
+                grid-template-columns: 1fr;
+                grid-template-rows: 35fr 30fr 35fr;
+                gap: 0;
+            }
+
+            .stack > :nth-child(2) { grid-row: 3; }
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 24px;
+            overflow: hidden;
+            border-radius: 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            transition: border-color .2s ease, box-shadow .25s ease, background-color .3s ease;
+        }
+
+        .card:hover,
+        .card:focus-visible {
+            border-color: var(--accent);
+            box-shadow: 0 12px 34px var(--glow);
+        }
+
+        .card h2 { font-size: 1.375rem; font-weight: 800; line-height: 1.25; }
+        .card p { margin-top: 6px; font-size: .9375rem; line-height: 1.5; color: var(--muted); }
+
+        .card.tall { min-height: 300px; }
+
+        .card .art {
+            flex: 1;
+            display: grid;
+            place-items: center;
+            min-height: 140px;
+            border-radius: 18px;
+            background: var(--card-deep);
+            transition: background-color .3s ease;
+        }
+
+        .card.wide { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; }
+        .card.wide .art { flex: none; width: 112px; height: 96px; min-height: 0; }
+
+        @media (min-width: 1024px) {
+            .card { padding: 20px; }
+            .card h2 { font-size: 1.25rem; }
+            .card.tall { min-height: 0; }
+            .card.wide { height: 100%; }
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            height: 40px;
+            margin-top: 16px;
+            padding: 0 18px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #fff;
+            font-size: .875rem;
+            font-weight: 700;
+            transition: background-color .2s ease;
+        }
+
+        .card:hover .pill { background: var(--accent-deep); }
+
+        .levels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+        }
+
+        .levels span {
+            display: grid;
+            place-items: center;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            font-weight: 800;
+            font-size: .9375rem;
+            transition: background-color .3s ease, border-color .3s ease;
+        }
+
+        .levels span:last-child { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="topbar themed">
+        <a href="home.html" class="logo" aria-label="VOCZ Gaming English - Trang chủ">
+            <svg class="dragon-emblem" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                    <linearGradient id="whiteDragon" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color: var(--dragon-a)"/>
+                        <stop offset="50%" style="stop-color: var(--dragon-b)"/>
+                        <stop offset="100%" style="stop-color: var(--dragon-c)"/>
+                    </linearGradient>
+                    <linearGradient id="glowRed" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ff3b5c"/>
+                        <stop offset="100%" stop-color="#e60033"/>
+                    </linearGradient>
+                </defs>
+                <path d="M50 15 L65 35 L85 25 L75 50 L95 65 L70 70 L65 90 L50 75 L35 90 L30 70 L5 65 L25 50 L15 25 L35 35 Z" fill="url(#whiteDragon)" opacity="0.15"/>
+                <path d="M50 10 C45 20 35 25 25 20 C35 35 45 40 48 55 C40 55 30 50 20 60 C35 65 45 65 50 85 C55 65 65 65 80 60 C70 50 60 55 52 55 C55 40 65 35 75 20 C65 25 55 20 50 10 Z" fill="url(#whiteDragon)"/>
+                <circle cx="43" cy="28" r="3" fill="url(#glowRed)"/>
+                <circle cx="57" cy="28" r="3" fill="url(#glowRed)"/>
+            </svg>
+            <div class="flex flex-col gap-1 min-w-0">
+                <div class="brand-name">VOC<span>Z</span></div>
+                <div class="brand-sub max-[479px]:hidden">Gaming English</div>
+            </div>
+        </a>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="power-badge themed" title="Lực Chiến">
+                <span aria-hidden="true">⚡</span>
+                <span class="max-[419px]:hidden">Lực Chiến</span>
+                <b id="combatPower">0</b>
+            </div>
+
+            <button id="themeToggle" class="icon-btn themed" type="button" aria-label="Chuyển sang giao diện sáng">
+                <span id="themeIcon" aria-hidden="true">☀️</span>
+            </button>
+
+            <a href="user.html" class="avatar-btn themed" title="Hồ sơ của bạn" aria-label="Chi tiết hồ sơ">
+                <img id="avatarImg" src="https://api.dicebear.com/9.x/bottts/svg?seed=VOCZ1" alt="Avatar của bạn" width="40" height="40">
+            </a>
+        </div>
+    </header>
+
+    <nav class="side" aria-label="Luyện kỹ năng">
+        <a href="lis.html" title="Luyện Nghe" aria-label="Luyện Nghe">
+            <span class="ico" aria-hidden="true">🎧</span><span class="lbl">Luyện Nghe</span>
+        </a>
+        <a href="read.html" title="Luyện Đọc" aria-label="Luyện Đọc">
+            <span class="ico" aria-hidden="true">📖</span><span class="lbl">Luyện Đọc</span>
+        </a>
+        <a href="write.html" title="Luyện Viết" aria-label="Luyện Viết">
+            <span class="ico" aria-hidden="true">✍️</span><span class="lbl">Luyện Viết</span>
+        </a>
+        <a href="speak.html" title="Luyện Nói" aria-label="Luyện Nói">
+            <span class="ico" aria-hidden="true">🗣️</span><span class="lbl">Luyện Nói</span>
+        </a>
+    </nav>
+
+    <main class="main">
+        <div class="dash">
+
+            <a href="pvp.html" class="card tall">
+                <div class="art">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                        <g stroke="currentColor" stroke-width="6" stroke-linecap="round" style="color: var(--muted)">
+                            <line x1="26" y1="26" x2="88" y2="88"/>
+                            <line x1="94" y1="26" x2="32" y2="88"/>
+                        </g>
+                        <g stroke="var(--accent)" stroke-width="6" stroke-linecap="round">
+                            <line x1="78" y1="98" x2="98" y2="78"/>
+                            <line x1="22" y1="78" x2="42" y2="98"/>
+                            <line x1="92" y1="92" x2="102" y2="102"/>
+                            <line x1="28" y1="92" x2="18" y2="102"/>
+                        </g>
+                        <circle cx="60" cy="57" r="15" fill="var(--accent)"/>
+                        <text x="60" y="62.5" text-anchor="middle" font-size="14" font-weight="900" fill="#fff" font-family="'Be Vietnam Pro', system-ui, sans-serif">VS</text>
+                    </svg>
+                </div>
+                <div>
+                    <h2>Đấu Trường PvP</h2>
+                    <p>Đối kháng, thách đấu câu hỏi với người chơi khác.</p>
+                    <span class="pill">Vào đấu</span>
+                </div>
+            </a>
+
+            <a href="vocab.html" class="card tall">
+                <div class="art">
+                    <div class="levels" aria-hidden="true">
+                        <span>A1</span><span>A2</span><span>B1</span>
+                        <span>B2</span><span>C1</span><span>C2</span>
+                    </div>
+                </div>
+                <div>
+                    <h2>Thao Trường Từ Vựng</h2>
+                    <p>Học từ vựng A1–C2, ôn tập theo Spaced Repetition.</p>
+                    <span class="pill">Vào luyện</span>
+                </div>
+            </a>
+
+            <div class="stack">
+                <a href="rank.html" class="card wide">
+                    <div>
+                        <h2>Bảng Xếp Hạng</h2>
+                        <p>Xem thứ hạng Lực Chiến của bạn.</p>
+                    </div>
+                    <div class="art">
+                        <svg width="76" height="60" viewBox="0 0 96 70" aria-hidden="true">
+                            <rect x="0" y="30" width="28" height="40" rx="5" style="fill: var(--muted)" opacity=".55"/>
+                            <rect x="34" y="6" width="28" height="64" rx="5" fill="var(--accent)"/>
+                            <rect x="68" y="40" width="28" height="30" rx="5" style="fill: var(--muted)" opacity=".35"/>
+                        </svg>
+                    </div>
+                </a>
+
+                <a href="other.html" class="card wide">
+                    <div>
+                        <h2>Khác &amp; Quà Tặng</h2>
+                        <p>Nhận quà và khám phá thêm.</p>
+                    </div>
+                    <div class="art">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                            <rect x="8" y="26" width="48" height="30" rx="5" style="fill: var(--muted)" opacity=".45"/>
+                            <rect x="5" y="18" width="54" height="12" rx="4" style="fill: var(--muted)" opacity=".75"/>
+                            <rect x="28" y="18" width="8" height="38" fill="var(--accent)"/>
+                            <path d="M32 18 C24 6 12 10 18 16 C21 19 28 18 32 18 Z" fill="var(--accent)"/>
+                            <path d="M32 18 C40 6 52 10 46 16 C43 19 36 18 32 18 Z" fill="var(--accent)"/>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        (function () {
+            var root = document.documentElement;
+            var themeBtn = document.getElementById('themeToggle');
+            var themeIcon = document.getElementById('themeIcon');
+            var metaTheme = document.querySelector('meta[name="theme-color"]');
+
+            function applyTheme(theme) {
+                root.setAttribute('data-theme', theme);
+                var isDark = theme === 'dark';
+                themeIcon.textContent = isDark ? '☀️' : '🌙';
+                themeBtn.setAttribute('aria-label', isDark ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối');
+                if (metaTheme) metaTheme.setAttribute('content', isDark ? '#0f1117' : '#f3f4f8');
+            }
+
+            applyTheme(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+            themeBtn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                applyTheme(next);
+                try { localStorage.setItem('vocz-theme', next); } catch (e) {}
+            });
+
+            var AVATAR_KEY = 'vocz-avatar';
+            var POWER_KEY = 'vocz-power';
+            var DEFAULT_SEED = 'VOCZ1';
+            var avatarImg = document.getElementById('avatarImg');
+            var powerEl = document.getElementById('combatPower');
+
+            function avatarSrc(value) {
+                if (/^(https?:|data:|\/|\.)/.test(value)) return value;
+                return 'https://api.dicebear.com/9.x/bottts/svg?seed=' + encodeURIComponent(value);
+            }
+
+            function syncProfile() {
+                var avatar = DEFAULT_SEED;
+                var power = 0;
+                try {
+                    avatar = localStorage.getItem(AVATAR_KEY) || DEFAULT_SEED;
+                    power = parseInt(localStorage.getItem(POWER_KEY), 10);
+                } catch (e) {}
+                if (isNaN(power) || power < 0) power = 0;
+                var src = avatarSrc(avatar);
+                if (avatarImg.getAttribute('src') !== src) avatarImg.setAttribute('src', src);
+                powerEl.textContent = power.toLocaleString('vi-VN');
+            }
+
+            syncProfile();
+            window.addEventListener('storage', syncProfile);
+            window.addEventListener('pageshow', syncProfile);
+        })();
+    </script>
+</body>
+</html>
