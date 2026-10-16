@@ -103,7 +103,7 @@ h1{font-size:1.5rem;font-weight:800}
 .stat .hint{font-size:.78rem;color:var(--muted)}
 
 .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:16px;background:var(--card)}
-table{width:100%;border-collapse:collapse;min-width:720px}
+table{width:100%;border-collapse:collapse;min-width:640px}
 th{padding:12px;text-align:left;font-size:.8rem;font-weight:700;color:var(--muted);border-bottom:1px solid var(--border)}
 td{padding:4px 10px;border-bottom:1px solid var(--border)}
 tr:last-child td{border-bottom:0}
@@ -155,31 +155,44 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
 
 #loader{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;color:var(--muted);font-weight:600}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-.home{display:grid;gap:16px;grid-template-columns:1fr 1fr}
-.home .card{align-items:center;text-align:center;justify-content:center}
-.home .mini{min-height:130px}
-.home .mini .ico{font-size:2.2rem}
-.vocabcard,.practice{grid-column:1/-1}
-.home .ico{font-size:2.2rem}
-.board{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:620px;margin:0 auto}
-.board .stat{position:relative;padding:18px 20px;text-align:center}
-.board .stat::before,.board .stat::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--accent);opacity:.85;pointer-events:none}
-.board .stat::before{top:10px;left:10px;border-right:0;border-bottom:0;border-top-left-radius:6px}
-.board .stat::after{right:10px;bottom:10px;border-left:0;border-top:0;border-bottom-right-radius:6px}
-.board .stat .num{color:var(--accent)}
-.board .mid{grid-column:1/-1;justify-self:center;width:min(100%,300px)}
-.avatar-wrap{width:140px;height:140px}
-.avatar-wrap img{box-shadow:0 0 0 6px var(--accent-s),0 0 30px var(--glow)}
+.home{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.home .card{align-items:center;text-align:center;justify-content:center;padding:14px;gap:4px}
+.home .mini{min-height:112px}
+.home .ico{font-size:2rem;line-height:1}
+.home h2{font-size:1rem}
+.wide{grid-column:1/-1;flex-direction:row!important;text-align:left!important;justify-content:flex-start!important;gap:14px!important;padding:14px 18px!important}
+.wide .ico{font-size:1.8rem!important}
+.wide p{margin:0;font-size:.82rem}
+.hero{gap:6px;margin-bottom:14px}
+.avatar-wrap{width:104px;height:104px}
+.avatar-wrap img{box-shadow:0 0 0 5px var(--accent-s),0 0 26px var(--glow)}
+.board{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;max-width:560px;margin:0 auto}
+.board .stat{position:relative;padding:12px 16px;border-radius:14px;text-align:center}
+.board .stat::before,.board .stat::after{content:"";position:absolute;width:12px;height:12px;border:2px solid var(--accent);opacity:.85;pointer-events:none}
+.board .stat::before{top:8px;left:8px;border-right:0;border-bottom:0;border-top-left-radius:5px}
+.board .stat::after{right:8px;bottom:8px;border-left:0;border-top:0;border-bottom-right-radius:5px}
+.board .stat .num{font-size:1.7rem;margin-top:0;color:var(--accent);line-height:1.2}
+.board .mid{grid-column:1/-1;justify-self:center;width:min(100%,260px)}
+@media(max-width:479px){
+  .actions{gap:5px}
+  .icon-btn,.avatar-btn{width:34px;height:34px;font-size:.95rem}
+  .chip{height:34px;padding:0 9px;font-size:.82rem}
+  .chip .d{display:none}
+  .brand{gap:6px}.brand b{font-size:1.25rem}.dragon{width:30px;height:30px}
+}
 @media(min-width:900px){
-  .home{grid-template-columns:1.15fr 1fr 1fr;grid-template-rows:repeat(2,minmax(190px,1fr)) auto}
-  .vocabcard{grid-column:1;grid-row:1/3;order:-1}
-  .practice{grid-column:1/-1}
+  .home{grid-template-columns:1.1fr 1fr 1fr;grid-template-rows:1fr 1fr 84px;gap:16px;height:calc(100dvh - 150px);min-height:440px;max-height:760px}
+  .home .mini .ico{font-size:2.6rem}
+  .vocabcard{grid-column:1;grid-row:1/3;flex-direction:column!important;text-align:center!important;justify-content:center!important}
+  .vocabcard .ico{font-size:3.4rem!important}
+  .vocabcard h2{font-size:1.3rem}
+  .vocabcard p{font-size:.92rem}
 }
 @media(min-width:1024px){
-  html{font-size:18px}
+  html{font-size:17px}
   .topbar{height:68px}
-  .side{top:68px;width:236px}
-  .main{padding:96px 44px 44px 280px;max-width:1500px}
+  .side{top:68px;width:228px}
+  .main{padding:92px 40px 24px 264px;max-width:1500px}
 }
 </style>
 </head>
@@ -201,7 +214,7 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
     <div class="brand-text"><b>VOC<i>Z</i></b><span>English</span></div>
   </button>
   <div class="actions">
-    <div class="chip streak" title="Chuỗi ngày học liên tục"><span aria-hidden="true">🔥</span><span id="streakText">0 Ngày</span></div>
+    <div class="chip streak" title="Chuỗi ngày học liên tục"><span aria-hidden="true">🔥</span><span id="streakText">0</span><span class="d">Ngày</span></div>
     <button class="icon-btn" id="noticeBtn" type="button" title="Trung Tâm Thông Báo" aria-label="Trung Tâm Thông Báo"><span aria-hidden="true">🔔</span><span class="dot" id="noticeDot" hidden></span></button>
     <button class="icon-btn" id="themeBtn" type="button" aria-label="Đổi giao diện Sáng/Tối"><span id="themeIcon" aria-hidden="true">🌙</span></button>
     <button class="icon-btn" id="logoutBtn" type="button" title="Đăng xuất" aria-label="Đăng xuất"><span aria-hidden="true">🚪</span></button>
@@ -223,24 +236,18 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
 
   <!-- TRANG CHỦ -->
   <section id="viewHome">
-    <div class="greet">
-      <h1 id="greetName">Xin chào!</h1>
-      <p class="sub">Hôm nay bạn muốn học gì?</p>
-    </div>
     <div class="home">
       <a class="card mini" href="lis.html"><span class="ico" aria-hidden="true">🎧</span><h2>Luyện Nghe</h2></a>
       <a class="card mini" href="read.html"><span class="ico" aria-hidden="true">📖</span><h2>Luyện Đọc</h2></a>
       <a class="card mini" href="write.html"><span class="ico" aria-hidden="true">✍️</span><h2>Luyện Viết</h2></a>
       <a class="card mini" href="speak.html"><span class="ico" aria-hidden="true">🗣️</span><h2>Luyện Nói</h2></a>
-      <button class="card vocabcard" type="button" id="cardVocab">
+      <button class="card wide vocabcard" type="button" id="cardVocab">
         <span class="ico" aria-hidden="true">📚</span>
-        <h2>Sổ Tay Từ Vựng</h2>
-        <p>Lưu từ mới, nghe phát âm và ôn tập bằng trắc nghiệm.</p>
+        <div><h2>Sổ Tay Từ Vựng</h2><p>Lưu từ mới, nghe phát âm, ôn tập trắc nghiệm.</p></div>
       </button>
-      <a class="card practice" href="pvp.html">
+      <a class="card wide practice" href="pvp.html">
         <span class="ico" aria-hidden="true">🎯</span>
-        <h2>Luyện Tập &amp; Thử Thách</h2>
-        <p>Làm bài tập và thử thách để kiểm tra trình độ.</p>
+        <div><h2>Luyện Tập &amp; Thử Thách</h2><p>Làm bài tập và thử thách để kiểm tra trình độ.</p></div>
       </a>
     </div>
   </section>
@@ -259,7 +266,7 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th class="c-idx">#</th><th>Từ tiếng Anh</th><th>Nghĩa tiếng Việt</th><th>Ví dụ</th><th class="c-sm">Ôn tập</th><th class="c-sm">Xóa</th></tr></thead>
+          <thead><tr><th class="c-idx">#</th><th class="c-sm">Ôn tập</th><th>Từ tiếng Anh</th><th>Nghĩa tiếng Việt</th><th>Ví dụ</th><th class="c-sm">Xóa</th></tr></thead>
           <tbody id="vocabBody"></tbody>
         </table>
       </div>
@@ -445,7 +452,7 @@ async function touchStreak() {
   await save({ streak: userData.streak, lastCheckinDate: today });
 }
 function renderStreak() {
-  $('streakText').textContent = `${userData.streak || 0} Ngày`;
+  $('streakText').textContent = userData.streak || 0;
 }
 
 /* ---------- Hồ sơ ---------- */
@@ -458,7 +465,6 @@ function renderProfile() {
   $('headerAvatar').src = src;
   $('userAvatar').src = src;
   $('playerName').textContent = userData.displayName;
-  $('greetName').textContent = `Xin chào, ${userData.displayName}!`;
 }
 function renderProfileStats() {
   const total = vocabRows.filter(r => r.word.trim() && r.meaning.trim()).length;
@@ -575,57 +581,46 @@ function updatePracticeBtn() {
   $('startPractice').textContent = `Bắt đầu ôn tập (${n})`;
   $('startPractice').disabled = n === 0;
 }
+function buildRow(r, i) {
+  const tbody = $('vocabBody');
+  const tr = document.createElement('tr');
+  const mk = (val, ph) => { const x = document.createElement('input'); x.type = 'text'; x.value = val; x.placeholder = ph; return x; };
+  const inW = mk(r.word, 'apple'), inM = mk(r.meaning, 'quả táo'), inE = mk(r.example, 'I eat an apple.');
+  const chk = document.createElement('input');
+  chk.type = 'checkbox'; chk.checked = r.checked; chk.disabled = !isValid(r);
+  chk.setAttribute('aria-label', 'Chọn để ôn tập');
+  chk.onchange = () => { r.checked = chk.checked; updatePracticeBtn(); };
+  const del = document.createElement('button');
+  del.type = 'button'; del.className = 'mini-btn del'; del.textContent = '🗑️'; del.setAttribute('aria-label', 'Xóa từ');
+  del.onclick = () => { vocabRows = vocabRows.filter(x => x !== r); ensureBlankRow(); renderVocabTable(); queueSave(); };
+  const onInput = () => {
+    r.word = inW.value; r.meaning = inM.value; r.example = inE.value;
+    const ok = !!isValid(r);
+    chk.disabled = !ok;
+    if (!ok) { r.checked = false; chk.checked = false; }
+    if (r === vocabRows[vocabRows.length - 1] && (r.word.trim() || r.meaning.trim())) {
+      const nr = newRow();
+      vocabRows.push(nr);
+      tbody.appendChild(buildRow(nr, vocabRows.length - 1)); // chỉ thêm dòng mới, không vẽ lại bảng
+    }
+    updatePracticeBtn();
+    queueSave();
+  };
+  [inW, inM, inE].forEach(x => x.addEventListener('input', onInput));
+  const cellW = document.createElement('div');
+  cellW.className = 'cell'; cellW.append(inW, speakerBtn(() => r.word));
+  [['c-idx', String(i + 1)], ['c-sm', chk], [null, cellW], [null, inM], [null, inE], ['c-sm', del]].forEach(([cls, content]) => {
+    const td = document.createElement('td');
+    if (cls) td.className = cls;
+    td.append(content);
+    tr.appendChild(td);
+  });
+  return tr;
+}
 function renderVocabTable() {
   const tbody = $('vocabBody');
   tbody.innerHTML = '';
-  vocabRows.forEach((r, i) => {
-    const tr = document.createElement('tr');
-    const mk = (val, ph) => { const x = document.createElement('input'); x.type = 'text'; x.value = val; x.placeholder = ph; return x; };
-    const inW = mk(r.word, 'apple'), inM = mk(r.meaning, 'quả táo'), inE = mk(r.example, 'I eat an apple.');
-    const chk = document.createElement('input');
-    chk.type = 'checkbox'; chk.checked = r.checked; chk.disabled = !isValid(r);
-    chk.setAttribute('aria-label', 'Chọn để ôn tập');
-    chk.onchange = () => { r.checked = chk.checked; updatePracticeBtn(); };
-    const del = document.createElement('button');
-    del.type = 'button'; del.className = 'mini-btn del'; del.textContent = '🗑️'; del.setAttribute('aria-label', 'Xóa từ');
-    del.onclick = () => {
-      vocabRows = vocabRows.filter(x => x !== r);
-      ensureBlankRow();
-      renderVocabTable();
-      queueSave();
-    };
-    const onInput = () => {
-      r.word = inW.value; r.meaning = inM.value; r.example = inE.value;
-      const ok = !!isValid(r);
-      chk.disabled = !ok;
-      if (!ok) { r.checked = false; chk.checked = false; }
-      if (r === vocabRows[vocabRows.length - 1] && (r.word.trim() || r.meaning.trim())) {
-        vocabRows.push(newRow());
-        const row = document.createElement('tr'); // thêm dòng trống mà không mất focus
-        tbody.appendChild(row);
-        renderVocabTable();
-        const inputs = tbody.querySelectorAll('tr')[i].querySelectorAll('input[type=text]');
-        const active = [inW, inM, inE].indexOf(document.activeElement);
-        (inputs[Math.max(active, 0)] || inputs[0]).focus();
-      }
-      updatePracticeBtn();
-      queueSave();
-    };
-    [inW, inM, inE].forEach(x => x.addEventListener('input', onInput));
-
-    const cellW = document.createElement('div');
-    cellW.className = 'cell'; cellW.append(inW, speakerBtn(() => r.word));
-    const cols = [
-      ['c-idx', String(i + 1)], [null, cellW], [null, inM], [null, inE], ['c-sm', chk], ['c-sm', del]
-    ];
-    cols.forEach(([cls, content]) => {
-      const td = document.createElement('td');
-      if (cls) td.className = cls;
-      td.append(content);
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-  });
+  vocabRows.forEach((r, i) => tbody.appendChild(buildRow(r, i)));
   updatePracticeBtn();
 }
 $('selectAll').onclick = () => { vocabRows.forEach(r => { if (isValid(r)) r.checked = true; }); renderVocabTable(); };
@@ -725,20 +720,28 @@ async function finishQuiz() {
 
 /* ---------- Đăng xuất & Auth Guard ---------- */
 $('logoutBtn').onclick = async () => {
+  $('loader').style.display = 'grid';
   await flushVocab();
+  currentUser = null;
   await signOut(auth);
-  try { localStorage.removeItem('vocz-theme-keep'); } catch (e) {}
-  location.href = "index.html";
+  location.replace("index.html");
 };
+// Quay lại bằng nút Back (trang cache) mà đã đăng xuất → đá về index
+window.addEventListener('pageshow', e => {
+  if (e.persisted && (!currentUser || !auth.currentUser)) {
+    $('loader').style.display = 'grid';
+    location.replace("index.html");
+  }
+});
 
 onAuthStateChanged(auth, async user => {
-  if (!user) { location.href = "index.html"; return; }
+  if (!user) { location.replace("index.html"); return; }
   currentUser = user;
   try {
     const snap = await getDoc(doc(db, "users", user.uid));
-    if (!snap.exists()) { await signOut(auth); location.href = "index.html"; return; }
+    if (!snap.exists()) { await signOut(auth); location.replace("index.html"); return; }
     const d = snap.data();
-    if (d.status !== "approved" && d.role !== "admin") { await signOut(auth); location.href = "index.html"; return; }
+    if (d.status !== "approved" && d.role !== "admin") { await signOut(auth); location.replace("index.html"); return; }
 
     const arr = v => Array.isArray(v) ? v : [];
     userData = {
@@ -767,7 +770,7 @@ onAuthStateChanged(auth, async user => {
     touchStreak(); // vào học trong chu kỳ mới → tự cập nhật streak
   } catch (err) {
     console.error("Lỗi tải dữ liệu:", err);
-    location.href = "index.html";
+    location.replace("index.html");
   }
 });
 </script>
