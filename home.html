@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" data-theme="light">
+<html lang="vi" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -11,17 +11,19 @@ try { var t = localStorage.getItem('vocz-theme'); if (t === 'light' || t === 'da
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root, :root[data-theme="light"] {
-  --bg:#f6f7fb; --card:#fff; --soft:#eef0f7; --border:#e1e4ee; --text:#1b1f3a; --muted:#5d6485;
-  --accent:#4255ff; --accent-d:#3043e0; --accent-s:rgba(66,85,255,.1);
-  --ok:#1f9d63; --ok-s:rgba(31,157,99,.12); --bad:#d6453d; --bad-s:rgba(214,69,61,.1);
-  --streak:#f07a12; --shadow:rgba(27,31,58,.08); color-scheme:light;
+:root, :root[data-theme="dark"] {
+  --bg:#0f1117; --card:#1a1d26; --soft:#141720; --border:#2a2f3d; --text:#f1f5f9; --muted:#94a3b8;
+  --accent:#ff3b5c; --accent-d:#e60033; --accent-s:rgba(255,59,92,.14); --glow:rgba(255,59,92,.28);
+  --ok:#5fb985; --ok-s:rgba(95,185,133,.18); --bad:#e0554f; --bad-s:rgba(224,85,79,.18);
+  --streak:#ff3b5c; --shadow:rgba(0,0,0,.45);
+  --dragon-a:#fff; --dragon-b:#e2e8f0; --dragon-c:#94a3b8; --brand-a:#f1f5f9; color-scheme:dark;
 }
-:root[data-theme="dark"] {
-  --bg:#0b0d1a; --card:#161a30; --soft:#1e2340; --border:#2a3055; --text:#f0f2ff; --muted:#9aa1c7;
-  --accent:#6f80ff; --accent-d:#5b6cf0; --accent-s:rgba(111,128,255,.16);
-  --ok:#48c78e; --ok-s:rgba(72,199,142,.16); --bad:#f0716a; --bad-s:rgba(240,113,106,.16);
-  --streak:#ff9a3d; --shadow:rgba(0,0,0,.4); color-scheme:dark;
+:root[data-theme="light"] {
+  --bg:#f3f4f8; --card:#fff; --soft:#eef0f5; --border:#dfe2ea; --text:#14161d; --muted:#566074;
+  --accent:#e0203f; --accent-d:#c4002b; --accent-s:rgba(224,32,63,.1); --glow:rgba(224,32,63,.18);
+  --ok:#1f8a52; --ok-s:rgba(31,138,82,.12); --bad:#c93a34; --bad-s:rgba(201,58,52,.12);
+  --streak:#e0203f; --shadow:rgba(20,22,29,.12);
+  --dragon-a:#1f2433; --dragon-b:#3a4260; --dragon-c:#6b7694; --brand-a:#14161d; color-scheme:light;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Be Vietnam Pro',system-ui,sans-serif;min-height:100vh;line-height:1.5}
@@ -30,9 +32,14 @@ body{background:var(--bg);color:var(--text);font-family:'Be Vietnam Pro',system-
 button{font-family:inherit;color:inherit}
 
 .topbar{position:fixed;inset:0 0 auto 0;height:60px;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(12px,3vw,24px);background:var(--card);border-bottom:1px solid var(--border)}
-.brand{display:flex;align-items:baseline;gap:8px;background:none;border:0;cursor:pointer}
-.brand b{font-size:1.35rem;font-weight:800;color:var(--accent);letter-spacing:.5px}
-.brand span{font-size:.85rem;color:var(--muted);font-weight:500}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;cursor:pointer;min-width:0}
+.dragon{width:38px;height:38px;flex:none;filter:drop-shadow(0 0 6px var(--glow));animation:floatDragon 3s ease-in-out infinite}
+@keyframes floatDragon{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.brand-text{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.brand b{font-size:1.45rem;font-weight:900;letter-spacing:2px;line-height:1;background:linear-gradient(135deg,var(--brand-a) 30%,var(--accent) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.brand b i{font-style:normal;color:var(--accent);-webkit-text-fill-color:var(--accent)}
+.brand span{font-size:.78rem;font-weight:600;color:var(--muted);line-height:1}
+@media(max-width:479px){.brand span{display:none}}
 .actions{display:flex;align-items:center;gap:8px}
 .chip,.icon-btn{height:40px;border-radius:999px;border:1px solid var(--border);background:var(--card);display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:.9rem;font-weight:600}
 .chip{padding:0 14px}
@@ -148,6 +155,32 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
 
 #loader{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;color:var(--muted);font-weight:600}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.home{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+.home .card{align-items:center;text-align:center;justify-content:center}
+.home .mini{min-height:130px}
+.home .mini .ico{font-size:2.2rem}
+.vocabcard,.practice{grid-column:1/-1}
+.home .ico{font-size:2.2rem}
+.board{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:620px;margin:0 auto}
+.board .stat{position:relative;padding:18px 20px;text-align:center}
+.board .stat::before,.board .stat::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--accent);opacity:.85;pointer-events:none}
+.board .stat::before{top:10px;left:10px;border-right:0;border-bottom:0;border-top-left-radius:6px}
+.board .stat::after{right:10px;bottom:10px;border-left:0;border-top:0;border-bottom-right-radius:6px}
+.board .stat .num{color:var(--accent)}
+.board .mid{grid-column:1/-1;justify-self:center;width:min(100%,300px)}
+.avatar-wrap{width:140px;height:140px}
+.avatar-wrap img{box-shadow:0 0 0 6px var(--accent-s),0 0 30px var(--glow)}
+@media(min-width:900px){
+  .home{grid-template-columns:1.15fr 1fr 1fr;grid-template-rows:repeat(2,minmax(190px,1fr)) auto}
+  .vocabcard{grid-column:1;grid-row:1/3;order:-1}
+  .practice{grid-column:1/-1}
+}
+@media(min-width:1024px){
+  html{font-size:18px}
+  .topbar{height:68px}
+  .side{top:68px;width:236px}
+  .main{padding:96px 44px 44px 280px;max-width:1500px}
+}
 </style>
 </head>
 <body>
@@ -155,11 +188,23 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
 <div id="loader">Đang tải dữ liệu...</div>
 
 <header class="topbar">
-  <button class="brand" id="brandBtn" type="button" aria-label="Về trang chủ"><b>VOCZ</b><span>English</span></button>
+  <button class="brand" id="brandBtn" type="button" aria-label="Về trang chủ">
+    <svg class="dragon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="wd" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:var(--dragon-a)"/><stop offset="50%" style="stop-color:var(--dragon-b)"/><stop offset="100%" style="stop-color:var(--dragon-c)"/></linearGradient>
+        <linearGradient id="gr" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ff3b5c"/><stop offset="100%" stop-color="#e60033"/></linearGradient>
+      </defs>
+      <path d="M50 15 L65 35 L85 25 L75 50 L95 65 L70 70 L65 90 L50 75 L35 90 L30 70 L5 65 L25 50 L15 25 L35 35 Z" fill="url(#wd)" opacity="0.15"/>
+      <path d="M50 10 C45 20 35 25 25 20 C35 35 45 40 48 55 C40 55 30 50 20 60 C35 65 45 65 50 85 C55 65 65 65 80 60 C70 50 60 55 52 55 C55 40 65 35 75 20 C65 25 55 20 50 10 Z" fill="url(#wd)"/>
+      <circle cx="43" cy="28" r="3" fill="url(#gr)"/><circle cx="57" cy="28" r="3" fill="url(#gr)"/>
+    </svg>
+    <div class="brand-text"><b>VOC<i>Z</i></b><span>English</span></div>
+  </button>
   <div class="actions">
     <div class="chip streak" title="Chuỗi ngày học liên tục"><span aria-hidden="true">🔥</span><span id="streakText">0 Ngày</span></div>
     <button class="icon-btn" id="noticeBtn" type="button" title="Trung Tâm Thông Báo" aria-label="Trung Tâm Thông Báo"><span aria-hidden="true">🔔</span><span class="dot" id="noticeDot" hidden></span></button>
     <button class="icon-btn" id="themeBtn" type="button" aria-label="Đổi giao diện Sáng/Tối"><span id="themeIcon" aria-hidden="true">🌙</span></button>
+    <button class="icon-btn" id="logoutBtn" type="button" title="Đăng xuất" aria-label="Đăng xuất"><span aria-hidden="true">🚪</span></button>
     <button class="avatar-btn" id="topAvatarBtn" type="button" title="Hồ sơ cá nhân"><img id="headerAvatar" alt="Avatar"></button>
   </div>
 </header>
@@ -182,24 +227,21 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
       <h1 id="greetName">Xin chào!</h1>
       <p class="sub">Hôm nay bạn muốn học gì?</p>
     </div>
-    <div class="grid two">
-      <button class="card" type="button" id="cardVocab">
-        <span class="ico" aria-hidden="true">📚</span>
-        <h2>Sổ Tay Từ Vựng</h2>
-        <p>Lưu từ mới, nghe phát âm và ôn tập bằng trắc nghiệm.</p>
-      </button>
-      <a class="card" href="pvp.html">
-        <span class="ico" aria-hidden="true">🎯</span>
-        <h2>Luyện Tập &amp; Thử Thách</h2>
-        <p>Làm bài tập và thử thách để kiểm tra trình độ.</p>
-      </a>
-    </div>
-    <h2 class="section-title">Kỹ năng</h2>
-    <div class="grid four">
+    <div class="home">
       <a class="card mini" href="lis.html"><span class="ico" aria-hidden="true">🎧</span><h2>Luyện Nghe</h2></a>
       <a class="card mini" href="read.html"><span class="ico" aria-hidden="true">📖</span><h2>Luyện Đọc</h2></a>
       <a class="card mini" href="write.html"><span class="ico" aria-hidden="true">✍️</span><h2>Luyện Viết</h2></a>
       <a class="card mini" href="speak.html"><span class="ico" aria-hidden="true">🗣️</span><h2>Luyện Nói</h2></a>
+      <button class="card vocabcard" type="button" id="cardVocab">
+        <span class="ico" aria-hidden="true">📚</span>
+        <h2>Sổ Tay Từ Vựng</h2>
+        <p>Lưu từ mới, nghe phát âm và ôn tập bằng trắc nghiệm.</p>
+      </button>
+      <a class="card practice" href="pvp.html">
+        <span class="ico" aria-hidden="true">🎯</span>
+        <h2>Luyện Tập &amp; Thử Thách</h2>
+        <p>Làm bài tập và thử thách để kiểm tra trình độ.</p>
+      </a>
     </div>
   </section>
 
@@ -255,10 +297,6 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
 
   <!-- HỒ SƠ -->
   <section id="viewUser" hidden>
-    <div class="page-head">
-      <h1>Hồ Sơ Cá Nhân</h1>
-      <button class="btn btn-danger" type="button" id="logoutBtn">Đăng xuất</button>
-    </div>
     <div class="hero">
       <div class="avatar-wrap">
         <img id="userAvatar" alt="Avatar">
@@ -266,12 +304,13 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
       </div>
       <h2 id="playerName" style="font-size:1.5rem;font-weight:800"></h2>
     </div>
-    <h2 class="section-title" style="margin-top:0">Thống kê học tập</h2>
-    <div class="stats">
-      <div class="stat"><div class="lbl">Từ trong sổ tay</div><div class="num" id="stTotal">0</div><div class="hint">từ</div></div>
-      <div class="stat"><div class="lbl">Từ đã ghi nhớ</div><div class="num" id="stMastered">0</div><div class="hint" id="stMasteredHint"></div></div>
-      <div class="stat"><div class="lbl">Chuỗi chuyên cần</div><div class="num" id="stStreak">0</div><div class="hint">ngày liên tục</div></div>
-      <div class="stat"><div class="lbl">Điểm kiểm tra</div><div class="num" id="stScore">0</div><div class="hint">cập nhật khi có bài thi</div></div>
+    <div class="board">
+      <div class="stat"><div class="lbl">🎧 Nghe</div><div class="num" id="stLis">0</div><div class="hint">điểm cao nhất</div></div>
+      <div class="stat"><div class="lbl">📖 Đọc</div><div class="num" id="stRead">0</div><div class="hint">điểm cao nhất</div></div>
+      <div class="stat mid"><div class="lbl">✍️ Viết</div><div class="num" id="stWrite">0</div><div class="hint">điểm cao nhất</div></div>
+      <div class="stat"><div class="lbl">🗣️ Nói</div><div class="num" id="stSpeak">0</div><div class="hint">điểm cao nhất</div></div>
+      <div class="stat"><div class="lbl">📚 Từ vựng</div><div class="num" id="stTotal">0</div><div class="hint" id="stMasteredHint"></div></div>
+      <div class="stat mid"><div class="lbl">🔥 Chuỗi chuyên cần</div><div class="num" id="stStreak">0</div><div class="hint">ngày liên tục</div></div>
     </div>
   </section>
 </main>
@@ -425,11 +464,13 @@ function renderProfileStats() {
   const total = vocabRows.filter(r => r.word.trim() && r.meaning.trim()).length;
   const have = new Set(vocabRows.map(r => r.word.trim().toLowerCase()));
   const mastered = (userData.masteredWords || []).filter(w => have.has(w)).length;
+  $('stLis').textContent = fmt(userData.best_lis);
+  $('stRead').textContent = fmt(userData.best_read);
+  $('stWrite').textContent = fmt(userData.best_write);
+  $('stSpeak').textContent = fmt(userData.best_speak);
   $('stTotal').textContent = fmt(total);
-  $('stMastered').textContent = fmt(mastered);
-  $('stMasteredHint').textContent = total ? `${Math.round(mastered / total * 100)}% sổ tay` : 'chưa có từ nào';
+  $('stMasteredHint').textContent = `đã thuộc ${fmt(mastered)} từ`;
   $('stStreak').textContent = fmt(userData.streak);
-  $('stScore').textContent = fmt(userData.score);
 }
 function renderAvatarGrid() {
   const grid = $('avatarGrid');
@@ -705,7 +746,10 @@ onAuthStateChanged(auth, async user => {
       avatar: d.avatar || "VOCZ1",
       streak: Number(d.streak) || 0,
       lastCheckinDate: d.lastCheckinDate || "",
-      score: Number(d.score) || 0,
+      best_lis: Number(d.best_lis) || 0,
+      best_read: Number(d.best_read) || 0,
+      best_write: Number(d.best_write) || 0,
+      best_speak: Number(d.best_speak) || 0,
       masteredWords: arr(d.masteredWords),
       readMails: arr(d.readMails)
     };
