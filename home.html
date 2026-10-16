@@ -194,6 +194,17 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
   .side{top:68px;width:228px}
   .main{padding:92px 40px 24px 264px;max-width:1500px}
 }
+td input[type=text]::placeholder{color:var(--muted);opacity:.5;font-style:italic}
+td input[type=checkbox]:disabled{opacity:.3;cursor:not-allowed}
+.summary{display:flex;justify-content:center;gap:32px;margin:6px 0 14px;font-size:.85rem;color:var(--muted)}
+.summary b{display:block;font-size:1.5rem;font-weight:700}
+.review{text-align:left;border-top:1px solid var(--border);padding-top:14px;margin-bottom:18px}
+.review h3{font-size:.95rem;margin-bottom:10px}
+.review ul{list-style:none;display:grid;gap:6px;max-height:200px;overflow-y:auto}
+.review li{display:flex;justify-content:space-between;gap:14px;padding:9px 12px;border-radius:10px;background:var(--soft);border:1px solid var(--border);font-size:.92rem}
+.review li span:last-child{color:var(--muted);text-align:right}
+.stackbtn{display:grid;gap:10px}
+.example{display:flex;align-items:flex-start;gap:6px}
 </style>
 </head>
 <body>
@@ -256,7 +267,7 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
   <section id="viewVocab" hidden>
     <div id="listView">
       <div class="page-head">
-        <div><h1>Sổ Tay Từ Vựng</h1><p class="sub">Điền từ và nghĩa, tick chọn để ôn tập.</p></div>
+        <div><h1>Sổ Tay Từ Vựng</h1><p class="sub">Điền đủ <b>từ</b> và <b>nghĩa</b> thì mới tick chọn được. Chọn ít nhất 4 từ để ôn tập.</p></div>
         <span class="saving" id="saveState"></span>
       </div>
       <div class="toolbar">
@@ -274,29 +285,32 @@ dialog h2{font-size:1.15rem;font-weight:800;margin-bottom:14px}
 
     <div id="practiceView" hidden>
       <div class="panel center" id="gate" hidden>
-        <p style="margin-bottom:16px">Sổ tay cần có ít nhất <b>4 từ có nghĩa khác nhau</b> để tạo câu hỏi trắc nghiệm 4 đáp án.</p>
-        <button class="btn btn-primary" type="button" id="gateBack">Quay lại sổ tay</button>
+        <p style="margin-bottom:18px;line-height:1.7">Bạn cần chọn ít nhất <b>4 từ vựng</b> (đã điền cả từ và nghĩa) để tạo câu hỏi trắc nghiệm. Hãy quay lại sổ tay để tick chọn thêm.</p>
+        <button class="btn btn-primary" type="button" id="gateBack">Quay lại Sổ Tay</button>
       </div>
 
       <div class="panel" id="quiz" hidden>
-        <div class="q-meta"><span>Câu <b id="qProg">0/0</b></span><span>Đúng <b id="qOk" style="color:var(--ok)">0</b> · Sai <b id="qBad" style="color:var(--bad)">0</b></span></div>
+        <div class="q-meta"><span>Tiến trình: <b id="qProg">0/0</b></span><span>Đúng <b id="qOk" style="color:var(--ok)">0</b> · Sai <b id="qBad" style="color:var(--bad)">0</b></span></div>
         <div class="bar"><i id="qBar"></i></div>
         <div class="q-word"><span id="qWord"></span><span id="qSpk"></span></div>
         <div id="qOpts"></div>
         <div id="qFb" hidden>
           <p id="qMsg" style="font-weight:700"></p>
-          <div class="example" id="qEx" hidden><b>Ví dụ:</b> <span id="qExText"></span></div>
+          <div class="example" id="qEx" hidden><span id="qExSpk"></span><div><b>Ví dụ:</b> <span id="qExText"></span></div></div>
           <button class="btn btn-primary block" type="button" id="qNext">Tiếp tục</button>
         </div>
       </div>
 
       <div class="panel center" id="result" hidden>
-        <h2>Kết quả ôn tập</h2>
+        <h2 style="font-size:1.4rem;font-weight:800">Kết quả đợt luyện tập</h2>
         <div class="big" id="rPct">0%</div>
-        <p class="sub" style="margin-bottom:20px" id="rNote"></p>
-        <div class="row">
-          <button class="btn btn-primary" type="button" id="rAgain">Ôn lại</button>
-          <button class="btn" type="button" id="rBack">Về sổ tay</button>
+        <div class="summary"><div><b id="rOk" style="color:var(--ok)">0</b>Câu đúng</div><div><b id="rBad" style="color:var(--bad)">0</b>Câu sai</div></div>
+        <p class="sub" id="rNote" style="margin-bottom:16px"></p>
+        <div class="review" id="reviewBox"><h3>Từ cần lưu ý</h3><ul id="wrongList"></ul></div>
+        <div class="stackbtn">
+          <button class="btn btn-primary" type="button" id="rAgain">Làm lại đợt này</button>
+          <button class="btn" type="button" id="rRetry">Ôn lại riêng câu sai</button>
+          <button class="btn" type="button" id="rBack">Thay đổi tùy chọn</button>
         </div>
       </div>
     </div>
@@ -556,14 +570,17 @@ $('noticeBtn').onclick = () => { renderNotices(); $('noticeDialog').showModal();
 $('noticeClose').onclick = () => $('noticeDialog').close();
 
 /* ---------- Sổ tay từ vựng ---------- */
+const isEmpty = r => !r.word.trim() && !r.meaning.trim() && !r.example.trim();
+const isComplete = r => !!(r.word.trim() && r.meaning.trim());
 const newRow = () => ({ id: Date.now() + Math.random(), word: '', meaning: '', example: '', checked: false });
-const isValid = r => r.word.trim() && r.meaning.trim();
 function ensureBlankRow() {
   const last = vocabRows[vocabRows.length - 1];
-  if (!last || last.word.trim() || last.meaning.trim()) vocabRows.push(newRow());
+  if (!last || !isEmpty(last)) vocabRows.push(newRow());
 }
+
+const canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
 function speak(text) {
-  if (!('speechSynthesis' in window) || !text.trim()) return;
+  if (!canSpeak || !text || !text.trim()) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text.trim());
   u.lang = 'en-US'; u.rate = 0.9;
@@ -571,45 +588,71 @@ function speak(text) {
 }
 function speakerBtn(getText) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'mini-btn'; b.title = 'Phát âm'; b.setAttribute('aria-label', 'Phát âm');
-  b.textContent = '🔊';
-  b.onclick = e => { e.stopPropagation(); speak(getText()); };
+  b.type = 'button'; b.className = 'mini-btn'; b.title = 'Nghe phát âm'; b.setAttribute('aria-label', 'Nghe phát âm');
+  b.textContent = '🔊'; b.hidden = !canSpeak;
+  b.addEventListener('click', e => { e.stopPropagation(); speak(getText()); });
   return b;
 }
-function updatePracticeBtn() {
-  const n = vocabRows.filter(r => r.checked && isValid(r)).length;
+
+function updateCount() {
+  const n = vocabRows.filter(r => r.checked && isComplete(r)).length;
   $('startPractice').textContent = `Bắt đầu ôn tập (${n})`;
   $('startPractice').disabled = n === 0;
 }
-function buildRow(r, i) {
+
+function buildRow(r) {
   const tbody = $('vocabBody');
   const tr = document.createElement('tr');
-  const mk = (val, ph) => { const x = document.createElement('input'); x.type = 'text'; x.value = val; x.placeholder = ph; return x; };
-  const inW = mk(r.word, 'apple'), inM = mk(r.meaning, 'quả táo'), inE = mk(r.example, 'I eat an apple.');
+  const mk = (val, ph, label) => {
+    const x = document.createElement('input');
+    x.type = 'text'; x.value = val; x.placeholder = ph; x.autocomplete = 'off'; x.setAttribute('aria-label', label);
+    return x;
+  };
+  const inW = mk(r.word, 'e.g. Apple', 'Từ tiếng Anh');
+  const inM = mk(r.meaning, 'e.g. Quả táo', 'Nghĩa tiếng Việt');
+  const inE = mk(r.example, 'e.g. I eat an apple.', 'Ví dụ');
+  const spk = speakerBtn(() => r.word);
+  spk.disabled = !r.word.trim();
+
   const chk = document.createElement('input');
-  chk.type = 'checkbox'; chk.checked = r.checked; chk.disabled = !isValid(r);
+  chk.type = 'checkbox'; chk.checked = r.checked;
   chk.setAttribute('aria-label', 'Chọn để ôn tập');
-  chk.onchange = () => { r.checked = chk.checked; updatePracticeBtn(); };
+  const syncChk = () => {
+    const ok = isComplete(r);
+    chk.disabled = !ok;
+    chk.title = ok ? '' : 'Điền cả từ và nghĩa để chọn';
+    if (!ok) { r.checked = false; chk.checked = false; }
+  };
+  syncChk();
+  chk.addEventListener('change', () => { r.checked = chk.checked; updateCount(); });
+
   const del = document.createElement('button');
-  del.type = 'button'; del.className = 'mini-btn del'; del.textContent = '🗑️'; del.setAttribute('aria-label', 'Xóa từ');
-  del.onclick = () => { vocabRows = vocabRows.filter(x => x !== r); ensureBlankRow(); renderVocabTable(); queueSave(); };
+  del.type = 'button'; del.className = 'mini-btn del'; del.textContent = '🗑️'; del.title = 'Xóa'; del.setAttribute('aria-label', 'Xóa từ');
+  del.addEventListener('click', () => {
+    vocabRows = vocabRows.filter(x => x !== r);
+    ensureBlankRow();
+    renderVocabTable();
+    queueSave();
+  });
+
   const onInput = () => {
     r.word = inW.value; r.meaning = inM.value; r.example = inE.value;
-    const ok = !!isValid(r);
-    chk.disabled = !ok;
-    if (!ok) { r.checked = false; chk.checked = false; }
-    if (r === vocabRows[vocabRows.length - 1] && (r.word.trim() || r.meaning.trim())) {
-      const nr = newRow();
-      vocabRows.push(nr);
-      tbody.appendChild(buildRow(nr, vocabRows.length - 1)); // chỉ thêm dòng mới, không vẽ lại bảng
+    spk.disabled = !r.word.trim();
+    syncChk();
+    if (r === vocabRows[vocabRows.length - 1] && !isEmpty(r)) {
+      const fresh = newRow();
+      vocabRows.push(fresh);
+      tbody.appendChild(buildRow(fresh));
+      renumber();
     }
-    updatePracticeBtn();
+    updateCount();
     queueSave();
   };
   [inW, inM, inE].forEach(x => x.addEventListener('input', onInput));
+
   const cellW = document.createElement('div');
-  cellW.className = 'cell'; cellW.append(inW, speakerBtn(() => r.word));
-  [['c-idx', String(i + 1)], ['c-sm', chk], [null, cellW], [null, inM], [null, inE], ['c-sm', del]].forEach(([cls, content]) => {
+  cellW.className = 'cell'; cellW.append(inW, spk);
+  [['c-idx', ''], ['c-sm', chk], [null, cellW], [null, inM], [null, inE], ['c-sm', del]].forEach(([cls, content]) => {
     const td = document.createElement('td');
     if (cls) td.className = cls;
     td.append(content);
@@ -617,103 +660,146 @@ function buildRow(r, i) {
   });
   return tr;
 }
-function renderVocabTable() {
-  const tbody = $('vocabBody');
-  tbody.innerHTML = '';
-  vocabRows.forEach((r, i) => tbody.appendChild(buildRow(r, i)));
-  updatePracticeBtn();
+function renumber() {
+  $('vocabBody').querySelectorAll('tr').forEach((tr, i) => { tr.firstElementChild.textContent = i + 1; });
 }
-$('selectAll').onclick = () => { vocabRows.forEach(r => { if (isValid(r)) r.checked = true; }); renderVocabTable(); };
-$('deselectAll').onclick = () => { vocabRows.forEach(r => r.checked = false); renderVocabTable(); };
+function renderVocabTable() {
+  $('vocabBody').replaceChildren(...vocabRows.map(buildRow));
+  renumber();
+  updateCount();
+}
+$('selectAll').onclick = () => { vocabRows.forEach(r => { r.checked = isComplete(r); }); renderVocabTable(); };
+$('deselectAll').onclick = () => { vocabRows.forEach(r => { r.checked = false; }); renderVocabTable(); };
 
 /* ---------- Ôn tập trắc nghiệm (không cộng điểm) ---------- */
-let pool = [], list = [], qi = 0, correct = 0, newlyMastered = 0, answered = false, options = [];
-const shuffle = a => a.slice().sort(() => Math.random() - .5);
-const leaveQuiz = () => { $('practiceView').hidden = true; $('listView').hidden = false; renderVocabTable(); };
+let pool = [], quiz = [], qi = 0, okCount = 0, wrongWords = [], answered = false, options = [], currentItem = null;
+const shuffle = a => {
+  const x = a.slice();
+  for (let i = x.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [x[i], x[j]] = [x[j], x[i]]; }
+  return x;
+};
+const showScreen = name => ['gate', 'quiz', 'result'].forEach(id => { $(id).hidden = id !== name; });
+const leaveQuiz = () => {
+  if (canSpeak) speechSynthesis.cancel();
+  $('practiceView').hidden = true; $('listView').hidden = false;
+  renderVocabTable();
+};
+$('qSpk').appendChild(speakerBtn(() => currentItem && currentItem.word));
+$('qExSpk').appendChild(speakerBtn(() => currentItem && currentItem.example));
 
 $('startPractice').onclick = () => {
-  pool = vocabRows.filter(r => r.checked && isValid(r)).map(r => ({ word: r.word.trim(), meaning: r.meaning.trim(), example: r.example.trim() }));
+  pool = vocabRows.filter(r => r.checked && isComplete(r))
+    .map(r => ({ word: r.word.trim(), meaning: r.meaning.trim(), example: r.example.trim() }));
   $('listView').hidden = true;
   $('practiceView').hidden = false;
-  const distinct = new Set(vocabRows.filter(r => r.meaning.trim()).map(r => r.meaning.trim().toLowerCase()));
-  if (distinct.size < 4) {
-    $('gate').hidden = false; $('quiz').hidden = true; $('result').hidden = true;
-  } else {
-    $('gate').hidden = true;
-    startQuiz();
-  }
+  window.scrollTo(0, 0);
+  if (pool.length < 4) showScreen('gate'); else startQuiz(pool);
 };
 $('gateBack').onclick = leaveQuiz;
 $('rBack').onclick = leaveQuiz;
-$('rAgain').onclick = startQuiz;
+$('rAgain').onclick = () => startQuiz(pool);
+$('rRetry').onclick = () => startQuiz(wrongWords.slice());
 
-function startQuiz() {
-  list = shuffle(pool); qi = 0; correct = 0; newlyMastered = 0;
-  $('quiz').hidden = false; $('result').hidden = true;
+function startQuiz(words) {
+  quiz = shuffle(words); qi = 0; okCount = 0; wrongWords = [];
+  newlyMastered = 0;
+  showScreen('quiz');
   renderQuestion();
 }
-function renderQuestion() {
-  answered = false;
-  const item = list[qi];
-  $('qWord').textContent = item.word;
-  $('qSpk').replaceChildren(speakerBtn(() => item.word));
-  $('qFb').hidden = true;
+let newlyMastered = 0;
 
+function buildOptions(item) {
   const seen = new Set([item.meaning.toLowerCase()]);
   const wrong = [];
-  for (const r of shuffle(vocabRows.filter(r => r.meaning.trim()))) {
-    const k = r.meaning.trim().toLowerCase();
-    if (!seen.has(k)) { seen.add(k); wrong.push(r.meaning.trim()); }
+  for (const w of shuffle(pool)) {
+    const k = w.meaning.toLowerCase();
+    if (!seen.has(k)) { seen.add(k); wrong.push(w.meaning); }
     if (wrong.length === 3) break;
   }
-  options = shuffle([item.meaning, ...wrong]);
+  return shuffle([item.meaning, ...wrong]);
+}
+function updateStats() {
+  const done = Math.min(qi + (answered ? 1 : 0), quiz.length);
+  $('qProg').textContent = `${done}/${quiz.length}`;
+  $('qOk').textContent = okCount;
+  $('qBad').textContent = wrongWords.length;
+  $('qBar').style.width = `${quiz.length ? done / quiz.length * 100 : 0}%`;
+}
+function renderQuestion() {
+  currentItem = quiz[qi];
+  answered = false;
+  $('qWord').textContent = currentItem.word;
+  $('qFb').hidden = true;
+  options = buildOptions(currentItem);
   const box = $('qOpts');
-  box.innerHTML = '';
+  box.replaceChildren();
   options.forEach((text, i) => {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'opt';
     const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = 'ABCD'[i];
     const label = document.createElement('span'); label.textContent = text;
     b.append(tag, label);
-    b.onclick = () => choose(i);
+    b.addEventListener('click', () => choose(i));
     box.appendChild(b);
   });
-  $('qProg').textContent = `${qi + 1}/${list.length}`;
-  $('qOk').textContent = correct;
-  $('qBad').textContent = qi - correct;
-  $('qBar').style.width = `${qi / list.length * 100}%`;
+  updateStats();
 }
 function choose(i) {
   if (answered) return;
   answered = true;
-  const item = list[qi];
+  const item = quiz[qi];
   const btns = Array.from($('qOpts').children);
   const ci = options.indexOf(item.meaning);
-  btns.forEach(b => b.disabled = true);
+  btns.forEach(b => { b.disabled = true; });
   btns[ci].classList.add('correct');
   const msg = $('qMsg');
   if (i === ci) {
-    correct++;
-    msg.style.color = 'var(--ok)'; msg.textContent = 'Chính xác!';
+    okCount++;
+    msg.style.color = 'var(--ok)'; msg.textContent = 'Chính xác! Bạn đã nhớ rất tốt từ này.';
     const key = item.word.toLowerCase();
     const set = new Set(userData.masteredWords);
     if (!set.has(key)) { set.add(key); userData.masteredWords = [...set]; newlyMastered++; }
   } else {
     btns[i].classList.add('wrong');
-    msg.style.color = 'var(--bad)'; msg.textContent = `Chưa đúng. Nghĩa đúng: ${item.meaning}`;
+    wrongWords.push(item);
+    msg.style.color = 'var(--bad)'; msg.textContent = `Chưa chính xác. Nghĩa đúng: ${item.meaning}`;
   }
   $('qEx').hidden = !item.example;
   $('qExText').textContent = item.example;
-  $('qNext').textContent = qi === list.length - 1 ? 'Xem kết quả' : 'Tiếp tục';
+  $('qNext').textContent = qi === quiz.length - 1 ? 'Xem kết quả' : 'Tiếp tục';
   $('qFb').hidden = false;
   $('qNext').focus();
+  updateStats();
 }
-$('qNext').onclick = () => { if (qi === list.length - 1) finishQuiz(); else { qi++; renderQuestion(); } };
+$('qNext').onclick = () => {
+  if (!answered) return;
+  if (canSpeak) speechSynthesis.cancel();
+  if (qi === quiz.length - 1) finishQuiz(); else { qi++; renderQuestion(); }
+};
+document.addEventListener('keydown', e => {
+  if ($('viewVocab').hidden || $('quiz').hidden || answered || e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  const i = 'abcd'.indexOf(k) >= 0 ? 'abcd'.indexOf(k) : '1234'.indexOf(k);
+  if (k.length === 1 && i >= 0 && i < options.length) choose(i);
+});
 
 async function finishQuiz() {
-  $('quiz').hidden = true; $('result').hidden = false;
-  $('rPct').textContent = Math.round(correct / list.length * 100) + '%';
-  $('rNote').textContent = newlyMastered ? `Bạn vừa ghi nhớ thêm ${newlyMastered} từ mới.` : 'Chưa có từ mới nào được ghi nhớ thêm.';
+  $('rPct').textContent = Math.round(okCount / quiz.length * 100) + '%';
+  $('rOk').textContent = okCount;
+  $('rBad').textContent = wrongWords.length;
+  $('rNote').textContent = newlyMastered ? `Bạn vừa ghi nhớ thêm ${newlyMastered} từ mới.` : '';
+  const list = $('wrongList');
+  list.replaceChildren();
+  wrongWords.forEach(w => {
+    const li = document.createElement('li');
+    const a = document.createElement('span'), b = document.createElement('span');
+    a.textContent = w.word; b.textContent = w.meaning;
+    li.append(a, b); list.appendChild(li);
+  });
+  $('reviewBox').hidden = wrongWords.length === 0;
+  $('rRetry').hidden = wrongWords.length === 0;
+  showScreen('result');
+  window.scrollTo(0, 0);
   await touchStreak();   // hoàn thành bài tập = tính chuyên cần
   await flushVocab();    // lưu từ đã thuộc (1 lần ghi)
 }
